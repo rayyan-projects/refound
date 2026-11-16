@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
+  // Theme is driven by <html data-theme> (section 2.9), so `dark:` follows it rather than the media query.
+  darkMode: ['selector', '[data-theme="dark"]'],
   theme: {
     colors: {
       transparent: 'transparent',
@@ -48,6 +50,7 @@ export default {
       // Named sizes for the explicit pixel values in the plan's component specs (sections 2.5 and 4).
       // They keep every class in `src` free of arbitrary values such as `w-[280px]`.
       spacing: {
+        4.5: '18px',
         13: '52px',
         15: '60px',
         18: '72px',
@@ -77,6 +80,7 @@ export default {
         palette: 'min(100vw - 32px, 600px)',
       },
       height: { bar: '56px' },
+      borderRadius: { px: '1px' },
       maxHeight: { palette: '400px' },
       transitionDuration: { fast: '120ms', base: '180ms', slow: '240ms' },
       transitionTimingFunction: { out: 'cubic-bezier(0.2, 0, 0, 1)' },

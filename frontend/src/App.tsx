@@ -1,4 +1,8 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// Development-only primitive gallery; absent from production builds.
+const Kit = import.meta.env.DEV ? lazy(() => import('./pages/Kit')) : null;
 
 // Page imports
 import Landing from './pages/Landing';
@@ -16,6 +20,16 @@ function App() {
         <Route path="/app/import" element={<Import />} />
         <Route path="/app/history" element={<History />} />
         <Route path="/app/settings" element={<Settings />} />
+        {Kit && (
+          <Route
+            path="/dev/kit"
+            element={
+              <Suspense fallback={null}>
+                <Kit />
+              </Suspense>
+            }
+          />
+        )}
       </Routes>
     </BrowserRouter>
   );
