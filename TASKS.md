@@ -7,6 +7,42 @@ The single place for task status. Update it in the same PR that changes a task's
 
 Status: ✅ done · 🔄 in progress / half-done · ⏸ blocked · ⬜ not started
 
+## 🗺 Big picture: from today to a finished ReFound
+
+**Finished means** every feature in the README vision works for a real user:
+1. Import ChatGPT/Claude chats, Markdown, TXT, PDF and images.
+2. Semantic search over everything imported.
+3. Memory Assistant: Gemini writes the answer from the matches.
+4. Similar Problem Detector: "you solved this before".
+5. Source citations on every answer.
+6. Everything stored locally (SQLite + FAISS).
+
+**Agreed approach:** most "implemented" features were reported as not working, so first make what exists actually
+work, one feature at a time, tested from a user's point of view. Only then build what's missing.
+
+| Phase | Goal | Status |
+|---|---|---|
+| 0. Tooling | PR previews + combined UAT site so every change can be tested live before merging | ⏸ waiting on Cloudflare (details below) |
+| 1. Make existing features work | Verify and fix each one as a user would use it | 🔄 started |
+| 1a | Chat share-link imports | ✅ ChatGPT done; Claude links disabled |
+| 1b | File uploads: ChatGPT/Claude exports, Markdown, TXT, PDF, duplicate check | ⬜ |
+| 1c | Processing: chunking, embeddings, FAISS save/delete, reranking | ⬜ |
+| 1d | Asking: streamed Gemini answers with source citations | ⬜ |
+| 1e | Query history | ⬜ |
+| 1f | Image import (Gemini vision) | ⬜ |
+| 1g | Test suite green (fix the 10 already-failing tests) | ⬜ |
+| 1h | Small UI bugs found along the way | ⬜ |
+| 2. Core missing features | Similar Problem Detector (headline feature) → Settings API | ⬜ |
+| 3. Expose what half-exists | Auto topic tags on import → Memory summaries endpoint + UI | ⬜ |
+| 4. Extensions | Bulk/folder import → Export/backup | ⬜ |
+
+**Deferred (revisit later):**
+- Re-enable Claude share links once a working fetch method exists.
+- Only include PRs with passing tests in UAT (skipped for now to avoid CI costs).
+- A hosted backend, so testers don't need to run it locally (needs a free or cheap server).
+
+The sections below track the detailed steps of the current work.
+
 ## 🔄 In progress / half-done
 
 ### ⏸ UAT and PR preview sites (Cloudflare Pages)
