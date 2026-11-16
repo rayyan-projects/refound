@@ -104,11 +104,17 @@ refound/
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── components/   # Reusable UI components
-│   │   ├── pages/        # Home, Import, Results, Settings
-│   │   ├── hooks/        # Custom React hooks
-│   │   ├── services/     # API client
-│   │   └── types/        # TypeScript types
+│   │   ├── pages/        # Welcome, Ask, Library, Import, History, Settings, NotFound
+│   │   ├── components/   # ui/ primitives, shell/ (sidebar, palette), ask/, library/, import/, history/, settings/, welcome/
+│   │   ├── state/        # Stores: settings, current question, import queue, toasts; React Query client
+│   │   ├── hooks/        # useStore, useBackendStatus, useDocuments, useHistory, useHotkeys, ...
+│   │   ├── lib/          # Pure helpers (dates, titles, call numbers, relevance, share links, answer parsing)
+│   │   ├── services/     # API client and NDJSON stream reader
+│   │   ├── styles/       # tokens.css: colour tokens for light and dark
+│   │   └── types/        # Provisional shapes for features the backend does not have yet
+│   ├── fixtures/         # Mock backend data (never imported by src/)
+│   ├── scripts/          # mock-backend.cjs, verify.cjs (Playwright), check-dist.cjs (bundle checks)
+│   ├── nginx.conf        # Copy of nginx/nginx.conf for the frontend Docker image
 │   ├── index.html
 │   └── package.json
 ├── .env.example

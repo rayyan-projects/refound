@@ -17,6 +17,10 @@ Run everything from this directory.
 | `npm run verify` | Build first, then drive every page and state with Playwright against the mock and save screenshots to `.shots/` |
 | `npm run check` | After a build: check bundle sizes and that `dist/` has no fixture data or CDN references |
 
+`npm run verify` needs Playwright and Chromium installed globally (it uses `require('playwright')`; Playwright is not a
+dependency of this package). `SHOTS_DIR` changes where screenshots go and `SCENES=ask-idle,library` runs only some
+scenes. The plan behind the design, with every page state, is `docs/FRONTEND_REDESIGN_PLAN.md`.
+
 To work on the UI without the Python backend: run `npm run mock`, start `npm run dev`, open the app and
 connect to `http://127.0.0.1:8787`.
 

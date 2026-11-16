@@ -31,7 +31,7 @@ work, one feature at a time, tested from a user's point of view. Only then build
 | 1e | Query history | ⬜ |
 | 1f | Image import (Gemini vision) | ⬜ |
 | 1g | Test suite green (fix the 10 already-failing tests) | ⬜ |
-| 1h | Small UI bugs found along the way | ⬜ |
+| 1h | Small UI bugs found along the way | ✅ fixed in the frontend redesign |
 | 2. Core missing features | Similar Problem Detector (headline feature) → Settings API | ⬜ |
 | 3. Expose what half-exists | Auto topic tags on import → Memory summaries endpoint + UI | ⬜ |
 | 4. Extensions | Bulk/folder import → Export/backup | ⬜ |
@@ -63,17 +63,17 @@ Branch `ci/frontend-previews-and-uat` (not merged). Guide: `docs/DEPLOYMENT.md` 
 - ✅ ChatGPT share links, incl. ChatGPT's new (Nov 2026) page format. Verified with a real link.
 - ✅ Claude JSON export uploads (tested with sample files only).
 - ⛔ Claude share links **disabled** (failed in real testing). Re-enable steps: `backend/app/parsers/claude_share_parser.py`.
-- ⬜ Remove "Claude link" wording from the UI until it works: `frontend/src/pages/app/Import.tsx`
-  L17 (`isValidShareUrl` accepts `claude.ai`), L69 (error toast), L137 (hint text); `EXPLAINER.md` Claude-link bullet.
+- ✅ Remove "Claude link" wording from the UI until it works. The Import page now rejects `claude.ai` links with
+  one clear message (`frontend/src/lib/shareLink.ts`); Claude **export** wording stays. `EXPLAINER.md` updated.
 - ⬜ Live-test a long ChatGPT share (40+ messages) and one containing an image.
 - ⬜ Test a real Claude data export file (`conversations.json`).
 - ⬜ Find ChatPeek's upstream repo URL (not recorded) and check if it now supports ChatGPT's new format.
 
-## ⬜ Small bugs found while testing (good first PR)
-- ⬜ Error toasts show raw JSON (`{"detail": ...}`) instead of the message (`frontend/src/services/api.ts`).
-- ⬜ Search source scores show as `404%` / `-564%` (rerank scores aren't 0–1).
-- ⬜ Library and search sources show the share URL instead of the conversation title.
-- ⬜ Imported ChatGPT text keeps markdown backslashes (`My pick\:`).
+## ✅ Small bugs found while testing (fixed in the frontend redesign)
+- ✅ Error toasts show raw JSON (`{"detail": ...}`) instead of the message (`frontend/src/services/api.ts`).
+- ✅ Search source scores show as `404%` / `-564%` (rerank scores aren't 0–1). Now Strong / Partial / Weak match.
+- ✅ Library and search sources show the share URL instead of the conversation title.
+- ✅ Imported ChatGPT text keeps markdown backslashes (`My pick\:`). Fixed for display; the stored text is unchanged.
 
 ## ⬜ Backend audit: verify and fix "implemented" features (one at a time)
 Most were reported as not working, or not correctly.
@@ -89,7 +89,8 @@ Most were reported as not working, or not correctly.
 2. ⬜ Settings API (backend is a stub; the frontend only uses localStorage).
 3. ⬜ Auto topic tags (`generate_topics` exists, never called).
 4. ⬜ Memory summaries endpoint (`summarize_memories` exists, not exposed).
-5. ⬜ Bulk / folder import.
+5. 🔄 Bulk / folder import. The frontend now covers it through the existing endpoint: several files at once and a
+   folder picker, uploaded one at a time with a result per file. No backend bulk endpoint.
 6. ⬜ Export / backup.
 
 ## ⬜ Repo housekeeping
@@ -98,6 +99,9 @@ Most were reported as not working, or not correctly.
 - ⬜ README says `cp ../.env.example`, but the file is `backend/.env.example`; `backend/test.txt` is a stray file.
 
 ## ✅ Done (recent)
+- ✅ Frontend redesign (Card Index): new shell, Library page, import queue with multi-file and folder import, honest
+  handling of features that are not built. Plan: `docs/FRONTEND_REDESIGN_PLAN.md`.
+- ✅ Dockerfile nginx.conf fixed (`frontend/nginx.conf` added; it was missing from the build context).
 - ✅ #18: ChatGPT share import via vendored ChatPeek + new-format fallback; Claude share links disabled.
 - ✅ Repo moved to `rayyan-projects/refound` (old URLs redirect).
 - ✅ `KEY_INFO.md`, `EXPLAINER.md`, `TASKS.md` created.
