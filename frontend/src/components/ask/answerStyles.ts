@@ -1,0 +1,6 @@
+/** Reading style for the answer body (section 2.3): Newsreader 18/30 from md, 16/28 below. */
+export const readingText = 'font-serif text-md leading-7 text-ink md:text-read';
+
+/** The streaming caret: a 2px by 20px accent bar after the last character of the last block. */
+export const caretClasses =
+  '[&>:is(p,h1,h2,h3,h4,h5,h6,blockquote):last-child]:after:ml-0.5 [&>:is(p,h1,h2,h3,h4,h5,h6,blockquote):last-child]:after:inline-block [&>:is(p,h1,h2,h3,h4,h5,h6,blockquote):last-child]:after:h-5 [&>:is(p,h1,h2,h3,h4,h5,h6,blockquote):last-child]:after:w-0.5 [&>:is(p,h1,h2,h3,h4,h5,h6,blockquote):last-child]:after:animate-breathe [&>:is(p,h1,h2,h3,h4,h5,h6,blockquote):last-child]:after:bg-accent [&>:is(p,h1,h2,h3,h4,h5,h6,blockquote):last-child]:after:align-text-bottom [&>:is(ul,ol):last-child>li:last-child]:after:ml-0.5 [&>:is(ul,ol):last-child>li:last-child]:after:inline-block [&>:is(ul,ol):last-child>li:last-child]:after:h-5 [&>:is(ul,ol):last-child>li:last-child]:after:w-0.5 [&>:is(ul,ol):last-child>li:last-child]:after:animate-breathe [&>:is(ul,ol):last-child>li:last-child]:after:bg-accent [&>:is(ul,ol):last-child>li:last-child]:after:align-text-bottom motion-reduce:[&>*]:after:hidden';

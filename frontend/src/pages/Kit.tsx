@@ -18,7 +18,6 @@ import { Callout } from '../components/ui/Callout';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Dialog } from '../components/ui/Dialog';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
-import { Toaster } from '../components/ui/Toaster';
 import { toast } from '../state/toasts';
 import { setTheme } from '../state/settings';
 import { useSettings } from '../hooks/useSettings';
@@ -39,7 +38,7 @@ export default function Kit() {
   const [dialog, setDialog] = useState(false);
   const [confirm, setConfirm] = useState(false);
   return (
-      <main className="min-h-dvh bg-canvas p-10 text-ink">
+      <div className="text-ink">
         <h1 className="font-serif text-page font-medium">Kit</h1>
         <Row title="Theme">
           <SegmentedControl
@@ -157,7 +156,6 @@ export default function Kit() {
           tone="danger"
           onConfirm={() => new Promise((_r, rej) => setTimeout(() => rej(new Error('The backend is not reachable')), 800))}
         />
-        <Toaster />
-      </main>
+      </div>
   );
 }

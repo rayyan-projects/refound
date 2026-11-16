@@ -59,6 +59,7 @@ export default {
         30: '120px',
         35: '140px',
         sidebar: '248px',
+        safe: 'env(safe-area-inset-bottom)',
       },
       maxWidth: {
         measure: '680px',
