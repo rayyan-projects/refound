@@ -33,7 +33,9 @@ Think of it like a librarian:
 ## How importing a share link works (just rebuilt)
 - **ChatGPT link** (`chatgpt.com/share/...`): we download the page and pull out the conversation data that's hidden
   inside it, in the right order, skipping system messages and dead-end branches.
-- **Claude link** (`claude.ai/share/...`): the page itself is empty, so we ask Claude's public "snapshot" address for the
+- **Claude link** (`claude.ai/share/...`): ⛔ **turned off for now** — it didn't work in real testing. Claude links
+  get a clear "not supported yet" message; uploading your Claude data export file still works. The old approach was:
+  the page itself is empty, so we ask Claude's public "snapshot" address for the
   conversation data directly.
 - Both use a small open-source library called **ChatPeek**, copied into the project (`backend/app/vendor/`).
   If ChatGPT or Claude change their websites, updating that one file is usually the fix. ChatGPT changed its
@@ -48,9 +50,9 @@ Think of it like a librarian:
 - **ChatGPT share links**: tested with a real link (import + search). Long chats and chats with images not yet tried.
 - **Claude JSON exports**: covered by tests with sample files.
 
-### 🟡 Built, needs a real-world check
-- **Claude share links**: Claude blocks requests from cloud servers, so it hasn't been tried for real yet.
-  It needs one test from a normal home connection.
+### ⛔ Turned off
+- **Claude share links**: failed in real testing (Claude blocks the way we fetch them), so they're disabled.
+  To do: remove "Claude link" wording from the Import page and this file until a working method is found.
 
 ### 🟡 Built, but not yet checked properly
 These exist in the code, but the team has reported most of them don't work, or don't work correctly.

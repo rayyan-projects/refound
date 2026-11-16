@@ -36,7 +36,7 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
   Multi-conversation Claude exports prefix headings with `"[<conversation name>] "`.
 - Dedup: `Document.file_hash` unique. Files: sha256(bytes). Share links: sha256(f"{source_type}:{share_id}") so
   query strings / trailing slashes don't create duplicates.
-- source_type values: chatgpt, chatgpt_share, claude, claude_share, markdown, txt, pdf, image.
+- source_type values: chatgpt, chatgpt_share, claude, markdown, txt, pdf, image (claude_share disabled).
 - `.json` uploads: `_detect_json_type` → "claude" if first object has `chat_messages`, else "chatgpt".
 
 ## 4. ChatGPT / Claude parsing (decisions — do not regress)
@@ -54,15 +54,25 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
   (`role`, markdown `content`; user/assistant only). Raises if fewer user turns than `conversation.userMessageCount`
   (never index a partial chat). Verified on one real short text-only share; long/multimodal shares not yet checked.
   Docs from this path still carry `metadata.method == "chatpeek"` (set by `chat_to_document`).
-- Claude share: page HTML is an empty shell. We fetch `https://claude.ai/api/chat_snapshots/<uuid>` JSON directly.
+- **Claude share links: DISABLED (Nov 2026).** Failed from a home connection too, not just cloud IPs.
+  `resolve_share_url` rejects `claude.ai/share/<uuid>` with "Claude share links aren't supported yet" (HTTP 422);
+  the parser is commented out in `app/parsers/claude_share_parser.py` (re-enable steps in its docstring).
+  Claude JSON *export* uploads are unaffected and still supported.
+  **TODO until re-enabled — remove user-facing mentions of Claude share links:**
+  - `frontend/src/pages/app/Import.tsx`: `isValidShareUrl` accepts `claude.ai` (L17); toast "ChatGPT or Claude
+    share link" (L69); hint "Paste a ChatGPT or Claude shared conversation link" (L137).
+  - `EXPLAINER.md` "How importing a share link works" (Claude link bullet) and the Features table row.
+  - Keep "(ChatGPT/Claude export)" wording for file uploads (`ImportDropZone.tsx`, `Import.tsx` L109): exports work.
+  - Landing page and readme.md have no Claude-link mentions (checked).
+- (Historical) Claude share: page HTML is an empty shell. We fetched `https://claude.ai/api/chat_snapshots/<uuid>` JSON directly.
   Cloudflare may 403 from cloud/VPN IPs → surfaces as ShareAccessError (HTTP 403 to the client). Not fixable server-side.
-  UNVERIFIED end to end: the only live attempt (from a cloud session) got the bot challenge; no home-connection test yet.
+  Live attempts: cloud session got the bot challenge; the user's home test also failed → feature disabled (above).
 - Claude JSON export: reuses `parse_claude_snapshot` per conversation (same message shape). Prefers `content[]`,
   falls back to `text`; null-safe; artifacts included, thinking excluded; empty conversations skipped.
 - **Fail loudly**: no conversation found / zero readable messages → ValueError → HTTP 422. Never fall back to
   scraping page text (old behaviour indexed login-page junk).
 - URL import is an **allowlist**, not a generic webpage fetcher (SSRF guard):
-  `https://chatgpt.com|www.chatgpt.com|chat.openai.com` + `/share/<id>` or `/s/<id>`; `http(s)://claude.ai/share/<uuid>`.
+  `https://chatgpt.com|www.chatgpt.com|chat.openai.com` + `/share/<id>` or `/s/<id>`. (Claude share links: disabled.)
   `/c/<id>` (private ChatGPT chat) gets a specific error. Generic webpage import was intentionally dropped
   (frontend already only accepts share links). bs4/lxml removed from deps.
 - Fetch is blocking `requests` → route calls `import_url` via `run_in_threadpool`. 2 attempts, 20s timeout (ChatGPT),
@@ -100,7 +110,7 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
 - No Alembic migrations despite alembic in requirements; schema changes need create_all on a fresh DB or a migration.
 
 ## 7. Work order (agreed plan)
-1. 🟡 ChatGPT + Claude parsers via ChatPeek (PR #17): ChatGPT share verified live; Claude share link not yet.
+1. ✅ ChatGPT share links (verified live) + Claude JSON exports (PR #17). Claude share links disabled — see §4.
 2. Verify/fix each remaining "implemented" feature one by one (most are reported not working correctly):
    file import pipeline, chunking quality, embeddings, FAISS persistence/delete, rerank, query stream, history.
 3. Similar Problem Detector. 4. Settings API. 5. Auto-topics. 6. Summarization endpoint. 7. Image import E2E.

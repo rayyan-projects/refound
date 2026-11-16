@@ -1,5 +1,6 @@
 """
-Fetches and parses ChatGPT / Claude shared conversation links.
+Fetches and parses ChatGPT shared conversation links (Claude share links are
+disabled for now; see claude_share_parser.py).
 
 Only allowlisted share URLs are accepted (see `resolve_share_url`); arbitrary
 webpages are rejected so the server never fetches user-supplied hosts.
@@ -15,8 +16,7 @@ from urllib.parse import urlparse
 
 from app.parsers.base import ParsedDocument
 from app.parsers.chatgpt_share_parser import ChatGPTShareParser
-from app.parsers.claude_parser import ClaudeShareParser
-from app.vendor.chatpeek import claude_share_id, fetch_claude_snapshot, fetch_share_page
+from app.vendor.chatpeek import claude_share_id, fetch_share_page
 
 CHATGPT_HOSTS = frozenset({"chatgpt.com", "www.chatgpt.com", "chat.openai.com"})
 CHATGPT_SHARE_PREFIXES = ("/share/", "/s/")
@@ -28,7 +28,7 @@ MAX_RESPONSE_CHARS = 25_000_000
 
 @dataclass(frozen=True)
 class ShareLink:
-    source_type: str   # chatgpt_share | claude_share
+    source_type: str   # chatgpt_share (claude_share disabled, see claude_share_parser.py)
     share_id: str
     url: str
 
@@ -37,9 +37,11 @@ def resolve_share_url(url: str) -> ShareLink:
     """Validate a share URL against the allowlist. Raises ValueError otherwise."""
 
     url = url.strip()
-    claude_id = claude_share_id(url)
-    if claude_id:
-        return ShareLink("claude_share", claude_id, url)
+    if claude_share_id(url):
+        raise ValueError(
+            "Claude share links aren't supported yet. Paste a ChatGPT share link, or upload "
+            "your Claude data export (conversations.json) instead."
+        )
 
     try:
         parsed = urlparse(url)
@@ -59,8 +61,7 @@ def resolve_share_url(url: str) -> ShareLink:
                 return ShareLink("chatgpt_share", share_id, url)
 
     raise ValueError(
-        "Unsupported URL. Paste a public ChatGPT (https://chatgpt.com/share/...) "
-        "or Claude (https://claude.ai/share/...) share link."
+        "Unsupported URL. Paste a public ChatGPT share link (https://chatgpt.com/share/...)."
     )
 
 
@@ -75,17 +76,12 @@ def import_url(url: str) -> ParsedDocument:
 
     link = resolve_share_url(url)
 
-    if link.source_type == "claude_share":
-        body = fetch_claude_snapshot(link.url, attempts=FETCH_ATTEMPTS)
-        parser: ChatGPTShareParser | ClaudeShareParser = ClaudeShareParser()
-    else:
-        body = fetch_share_page(link.url, timeout=FETCH_TIMEOUT_SECONDS, attempts=FETCH_ATTEMPTS)
-        parser = ChatGPTShareParser()
+    body = fetch_share_page(link.url, timeout=FETCH_TIMEOUT_SECONDS, attempts=FETCH_ATTEMPTS)
 
     if len(body) > MAX_RESPONSE_CHARS:
         raise ValueError("Shared conversation is too large to import")
 
-    parsed = parser.parse(body, link.url)
+    parsed = ChatGPTShareParser().parse(body, link.url)
     # Hash the canonical share id so the same share pasted with different
     # query strings / trailing slashes deduplicates.
     parsed.metadata["file_hash"] = hashlib.sha256(

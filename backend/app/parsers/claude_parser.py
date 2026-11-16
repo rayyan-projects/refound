@@ -1,15 +1,13 @@
 """
-Parsers for Claude conversations — JSON exports and shared links.
+Parser for Claude JSON exports (Settings → Privacy → Export data → conversations.json).
 
-Both formats carry the same message shape:
+Claude share links are DISABLED; see claude_share_parser.py and KEY_INFO.md.
+
+Exports and share snapshots carry the same message shape:
   {"chat_messages": [{"sender": "human"|"assistant", "text": str|null,
                       "content": [{"type": "text", "text": ...}, ...]}], "name": ...}
 so both go through ChatPeek's `parse_claude_snapshot`, which prefers
 `content[]` (text, artifacts, voice notes) and falls back to `text`.
-
-Shared links (claude.ai/share/<uuid>) are not scraped: the share page is an
-empty client-rendered shell. url_fetcher fetches the public
-/api/chat_snapshots/<uuid> JSON instead and hands it to ClaudeShareParser.
 """
 
 from __future__ import annotations
@@ -17,7 +15,7 @@ from __future__ import annotations
 import json
 
 from app.parsers.base import BaseParser, ParsedDocument
-from app.parsers.conversation import chat_sections, chat_to_document, sections_to_text
+from app.parsers.conversation import chat_sections, sections_to_text
 from app.vendor.chatpeek import parse_claude_snapshot
 
 
@@ -66,12 +64,3 @@ class ClaudeJsonParser(BaseParser):
             metadata={"conversation_count": len(titles)},
         )
 
-
-class ClaudeShareParser:
-    """Parses the chat_snapshots JSON behind a claude.ai/share/<uuid> link."""
-
-    source_type = "claude_share"
-
-    def parse(self, snapshot_json: str, url: str = "") -> ParsedDocument:
-        chat = parse_claude_snapshot(snapshot_json)
-        return chat_to_document(chat, self.source_type, url, "Claude Conversation")

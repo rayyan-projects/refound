@@ -11,7 +11,7 @@ from fastapi.testclient import TestClient
 from app.parsers import detect_source_type
 from app.parsers import url_fetcher
 from app.parsers.chatgpt_share_parser import ChatGPTShareParser
-from app.parsers.claude_parser import ClaudeJsonParser, ClaudeShareParser
+from app.parsers.claude_parser import ClaudeJsonParser
 from app.parsers.url_fetcher import import_url, resolve_share_url
 from app.vendor.chatpeek import ShareAccessError
 from main import create_app
@@ -79,29 +79,6 @@ class TestChatGPTShareParser:
             ChatGPTShareParser().parse(html)
 
 
-class TestClaudeShareParser:
-    def test_parses_snapshot(self):
-        doc = ClaudeShareParser().parse(fixture("claude_snapshot.json"), CLAUDE_URL)
-        assert doc.title == "Debugging a FastAPI lifespan"
-        assert doc.source_type == "claude_share"
-        text = doc.raw_text
-        # Sorted by index, not list order.
-        assert text.index("encoder missing") < text.index("TestClient only runs") < text.index("fixed it")
-        assert "AttributeError: encoder" in text      # attachment extracted_content
-        assert "with TestClient(app) as client" in text  # artifact source
-        assert "PRIVATE REASONING" not in text
-
-    def test_rejects_non_snapshot_body(self):
-        with pytest.raises(ValueError):
-            ClaudeShareParser().parse("<html>Just a moment...</html>")
-        with pytest.raises(ValueError):
-            ClaudeShareParser().parse(json.dumps({"uuid": "x"}))
-
-    def test_rejects_snapshot_without_messages(self):
-        with pytest.raises(ValueError, match="no readable messages"):
-            ClaudeShareParser().parse(json.dumps({"chat_messages": []}))
-
-
 class TestClaudeJsonParser:
     def test_parses_export_with_null_text_and_content_blocks(self):
         doc = ClaudeJsonParser().parse(fixture("claude_export.json").encode(), "conversations.json")
@@ -159,9 +136,6 @@ class TestResolveShareUrl:
         ("https://chatgpt.com/share/abc-123/?utm=x", "chatgpt_share", "abc-123"),
         ("https://chat.openai.com/share/xyz", "chatgpt_share", "xyz"),
         ("https://chatgpt.com/s/post_1", "chatgpt_share", "post_1"),
-        (CLAUDE_URL, "claude_share", "0f8e6a52-1c2b-4d3e-9f40-5a6b7c8d9e0f"),
-        ("  " + CLAUDE_URL.upper().replace("HTTPS://CLAUDE.AI/SHARE", "https://claude.ai/share") + "/ ",
-         "claude_share", "0f8e6a52-1c2b-4d3e-9f40-5a6b7c8d9e0f"),
     ])
     def test_accepts_share_links(self, url, source, share_id):
         link = resolve_share_url(url)
@@ -184,6 +158,11 @@ class TestResolveShareUrl:
         with pytest.raises(ValueError, match="Unsupported URL"):
             resolve_share_url(url)
 
+    @pytest.mark.parametrize("url", [CLAUDE_URL, " " + CLAUDE_URL + "/ "])
+    def test_claude_share_links_are_disabled_with_clear_message(self, url):
+        with pytest.raises(ValueError, match="Claude share links aren't supported yet"):
+            resolve_share_url(url)
+
     def test_private_chatgpt_link_has_specific_message(self):
         with pytest.raises(ValueError, match="private ChatGPT conversation"):
             resolve_share_url("https://chatgpt.com/c/abc")
@@ -199,13 +178,10 @@ class TestImportUrl:
         assert doc.source_type == "chatgpt_share"
         assert doc.metadata["file_hash"] == import_url("https://chatgpt.com/share/abc/").metadata["file_hash"]
 
-    def test_claude_share_uses_snapshot_api(self, monkeypatch):
-        monkeypatch.setattr(url_fetcher, "fetch_claude_snapshot",
-                            lambda url, **kw: fixture("claude_snapshot.json"))
-        monkeypatch.setattr(url_fetcher, "fetch_share_page", lambda *a, **kw: pytest.fail("HTML fetched"))
-        doc = import_url(CLAUDE_URL)
-        assert doc.source_type == "claude_share"
-        assert doc.title == "Debugging a FastAPI lifespan"
+    def test_claude_share_is_rejected_without_fetching(self, monkeypatch):
+        monkeypatch.setattr(url_fetcher, "fetch_share_page", lambda *a, **kw: pytest.fail("fetched"))
+        with pytest.raises(ValueError, match="Claude share links aren't supported yet"):
+            import_url(CLAUDE_URL)
 
     def test_does_not_fetch_disallowed_urls(self, monkeypatch):
         monkeypatch.setattr(url_fetcher, "fetch_share_page", lambda *a, **kw: pytest.fail("fetched"))
