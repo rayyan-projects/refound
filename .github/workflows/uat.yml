@@ -26,7 +26,9 @@ concurrency:
 
 jobs:
   assemble:
-    if: github.repository == 'mrkhan3870/Memory-Trace-'
+    # Runs only where a Pages project is configured (repo variable PAGES_PROJECT),
+    # so it survives repo moves and stays off in forks that don't set it up.
+    if: vars.PAGES_PROJECT != ''
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

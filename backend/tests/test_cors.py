@@ -21,10 +21,10 @@ def preflight(client, origin: str):
 
 @pytest.mark.parametrize("origin", [
     "http://localhost:5173",
-    "https://refound.pages.dev",
-    "https://uat.refound.pages.dev",
-    "https://abc123de.refound.pages.dev",
-    "https://feat-new-ui.refound.pages.dev",
+    "https://refound-24j.pages.dev",
+    "https://uat.refound-24j.pages.dev",
+    "https://abc123de.refound-24j.pages.dev",
+    "https://feat-new-ui.refound-24j.pages.dev",
 ])
 def test_allows_local_dev_and_project_previews(client, origin):
     response = preflight(client, origin)
@@ -34,10 +34,12 @@ def test_allows_local_dev_and_project_previews(client, origin):
 
 @pytest.mark.parametrize("origin", [
     "https://evil.pages.dev",
-    "https://refound.pages.dev.evil.com",
-    "https://evil.com/?https://uat.refound.pages.dev",
-    "http://uat.refound.pages.dev",
-    "https://a.b.refound.pages.dev",
+    "https://refound-24j.pages.dev.evil.com",
+    "https://evil.com/?https://uat.refound-24j.pages.dev",
+    "http://uat.refound-24j.pages.dev",
+    "https://a.b.refound-24j.pages.dev",
+    "https://refound.pages.dev",
+    "https://refound-evil.pages.dev",
 ])
 def test_rejects_other_origins(client, origin):
     response = preflight(client, origin)

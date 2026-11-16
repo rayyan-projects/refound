@@ -57,7 +57,7 @@ included.
 |---|---|
 | "Offline" and the backend is running | Check `http://localhost:8000/api/health` loads in the same browser. Make sure you allowed local network access (Chrome: site settings → "Local network access" → Allow). |
 | Works in Chrome, not Safari | Safari blocks `https` pages calling `http://localhost`. Use Chrome, Edge or Firefox. |
-| Console shows a CORS error | `CORS_ORIGIN_REGEX` in `backend/.env` must match the preview's address. It defaults to the `refound` project; replace it with the real project subdomain. Restart the backend after editing `.env`. |
+| Console shows a CORS error | `CORS_ORIGIN_REGEX` in `backend/.env` must match the preview's address. It defaults to the `refound-24j` project; replace it with the real project subdomain. Restart the backend after editing `.env`. |
 | Buttons fail with 404/422 errors | The backend is older or newer than the frontend. Check out the branch shown in the banner. |
 | UAT data looks broken after a PR changed the database models | Your local DB was created by older code (`init_db` doesn't add new columns). Stop the backend, move `refound.db` and the `faiss_index*` files aside, and restart. |
 
@@ -83,15 +83,21 @@ included.
 No `_redirects` file is needed. Pages serves `index.html` for unknown paths because the app has
 no `404.html`.
 
+### Who can connect the repo
+Cloudflare's GitHub app has to be installed by the repo's owner. For a repo under a personal
+account, only that person can do it. If they can't use Cloudflare, move the repo into a free
+GitHub organization where the person running Cloudflare is an owner.
+
 ### GitHub
 - **Settings → Secrets and variables → Actions → Variables:** add `PAGES_PROJECT` = the
-  subdomain from step 5. The UAT statuses use it to link `https://uat.<project>.pages.dev`.
+  subdomain from step 5. **This variable also switches the UAT workflow on**: it doesn't run in
+  a repo without it. The UAT statuses use it to link `https://uat.<project>.pages.dev`.
 - **Issues → Labels:** create a label named `uat`, used to opt in fork PRs.
 - *(Optional)* **Settings → Rules:** restrict who can push to `uat`, keeping the workflow allowed.
 - Run **Actions → UAT → Run workflow** once to create the `uat` branch.
 
 ### Backend CORS
-If the project subdomain isn't `refound`, set this in each tester's `backend/.env`:
+If the project subdomain isn't `refound-24j`, set this in each tester's `backend/.env`:
 ```
 CORS_ORIGIN_REGEX=^https://([a-z0-9-]+\.)?<project>\.pages\.dev$
 ```
