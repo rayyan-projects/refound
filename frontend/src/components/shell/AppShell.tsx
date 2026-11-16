@@ -5,6 +5,7 @@ import { setNavigator } from '../../state/navigation';
 import { toast } from '../../state/toasts';
 import { Toaster } from '../ui/Toaster';
 import { buttonClasses } from '../ui/buttonStyles';
+import { DropOverlay } from './DropOverlay';
 import { OfflineBanner } from './OfflineBanner';
 import { PageLoading } from './PageLoading';
 import { Sidebar } from './Sidebar';
@@ -74,6 +75,7 @@ export function AppShell() {
         </main>
       </div>
       <TabBar />
+      <DropOverlay />
       <Toaster />
     </div>
   );
