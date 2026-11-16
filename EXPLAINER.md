@@ -74,8 +74,19 @@ Each one still needs testing and fixing:
 - **Bulk/folder import**
 - **Export/backup** of your data
 
+### 🧹 Small known problems (found while testing imports)
+- Error messages show up as raw code (`{"detail": ...}`) instead of plain text.
+- Search results show odd scores like "404%".
+- Imported chats are listed by their link instead of their title.
+- Some imported text has stray backslashes (e.g. `My pick\:`).
+
+### 🚧 In progress: live test sites (UAT)
+A free setup (Cloudflare Pages) so every PR gets its own test website, plus one "UAT" site combining all open PRs.
+It's built (branch `ci/frontend-previews-and-uat`, guide in `docs/DEPLOYMENT.md` there) and waiting for a teammate
+to connect Cloudflare to the organization repo.
+
 ## What's next
-1. ✅ Fix ChatGPT + Claude importing (done)
+1. ✅ Fix ChatGPT importing (done; Claude share links turned off for now)
 2. Go through each "built but unchecked" feature one by one: test it, fix it
 3. Build the Similar Problem Detector
 4. Real Settings API
