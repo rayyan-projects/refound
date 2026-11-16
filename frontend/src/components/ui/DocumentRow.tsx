@@ -10,7 +10,7 @@ interface DocumentRowProps {
 export function DocumentRow({ doc, onDelete, isDeleting = false }: DocumentRowProps) {
   const [isHovered, setIsHovered] = useState(false);
 
-  const formattedDate = new Date(doc.created_at).toLocaleDateString('en-US', {
+  const formattedDate = new Date(doc.created_at ?? '').toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',

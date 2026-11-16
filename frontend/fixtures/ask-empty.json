@@ -1,0 +1,12 @@
+{
+  "_fixture": "refound-fixture-data",
+  "data": {
+    "tokens": [
+      "No relevant memories found. Import some documents first."
+    ],
+    "final": {
+      "sources": [],
+      "duration_ms": 41.8
+    }
+  }
+}

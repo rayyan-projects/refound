@@ -1,0 +1,125 @@
+{
+  "_fixture": "refound-fixture-data",
+  "data": [
+    {
+      "id": 42,
+      "filename": "https://chatgpt.com/share/6741f3c2-8a14-8005-b6d1-0c9e4f7a21bb",
+      "source_type": "chatgpt_share",
+      "title": "Postgres deadlock on concurrent upserts",
+      "created_at": "2026-11-14T09:12:44.512339",
+      "chunk_count": 34,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 41,
+      "filename": "conversations.json",
+      "source_type": "claude",
+      "title": "conversations.json",
+      "created_at": "2026-11-12T18:40:03.118204",
+      "chunk_count": 212,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 40,
+      "filename": "designing-data-intensive-applications-ch7.pdf",
+      "source_type": "pdf",
+      "title": "designing-data-intensive-applications-ch7",
+      "created_at": "2026-11-09T21:05:17.650112",
+      "chunk_count": 96,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 39,
+      "filename": "docker-notes.md",
+      "source_type": "markdown",
+      "title": "Docker build cache notes",
+      "created_at": "2026-11-03T07:58:29.004871",
+      "chunk_count": 18,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 38,
+      "filename": "https://chatgpt.com/share/672b9e10-4c7c-8005-9f3a-5d2e7b1c8842",
+      "source_type": "chatgpt_share",
+      "title": "Why is my FAISS recall dropping after deletes",
+      "created_at": "2026-10-28T14:22:51.337419",
+      "chunk_count": 27,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 37,
+      "filename": "whiteboard-auth-flow.png",
+      "source_type": "image",
+      "title": "whiteboard-auth-flow",
+      "created_at": "2026-10-21T10:15:08.902233",
+      "chunk_count": 2,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 36,
+      "filename": "interview-prep.txt",
+      "source_type": "txt",
+      "title": "interview-prep.txt",
+      "created_at": "2026-10-19T16:44:10.220915",
+      "chunk_count": 41,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 35,
+      "filename": "chatgpt-export-2026-10.json",
+      "source_type": "chatgpt",
+      "title": "Rust lifetimes in async closures",
+      "created_at": "2026-10-12T08:03:55.781002",
+      "chunk_count": 318,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 34,
+      "filename": "lease-agreement-2026.pdf",
+      "source_type": "pdf",
+      "title": "lease-agreement-2026",
+      "created_at": "2026-10-05T19:31:02.114760",
+      "chunk_count": 0,
+      "status": "error",
+      "error_message": "No chunks produced from document"
+    },
+    {
+      "id": 33,
+      "filename": "sourdough-log.md",
+      "source_type": "markdown",
+      "title": "Sourdough log",
+      "created_at": "2026-09-27T06:20:41.563008",
+      "chunk_count": 12,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 32,
+      "filename": "https://chatgpt.com/share/66f1a0b7-2d3c-8005-a1e9-7c4b6d5e3f10",
+      "source_type": "chatgpt_share",
+      "title": "",
+      "created_at": "2026-09-20T22:47:15.090344",
+      "chunk_count": 9,
+      "status": "indexed",
+      "error_message": null
+    },
+    {
+      "id": 31,
+      "filename": "nginx-reverse-proxy.md",
+      "source_type": "markdown",
+      "title": "Reverse proxy checklist",
+      "created_at": "2026-09-14T13:02:36.447120",
+      "chunk_count": 15,
+      "status": "indexed",
+      "error_message": null
+    }
+  ]
+}

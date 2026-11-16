@@ -1,0 +1,10 @@
+{
+  "_fixture": "refound-fixture-data",
+  "data": {
+    "status": "ok",
+    "document_id": 43,
+    "title": "release-checklist",
+    "source_type": "markdown",
+    "chunks": 11
+  }
+}

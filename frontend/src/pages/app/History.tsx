@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { PageLayout } from '../../components/layout/PageLayout';
 import { useBackend } from '../../hooks/useBackend';
-import { getHistory, type QueryHistoryItem } from '../../services/api';
+import { getHistory, type HistoryItem } from '../../services/api';
 
 export default function History() {
   const { backendUrl } = useBackend();
-  const [history, setHistory] = useState<QueryHistoryItem[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -78,9 +78,9 @@ export default function History() {
               const isExpanded = expandedId === item.id;
               // Truncate answer to 120 chars for excerpt
               const excerpt =
-                item.answer.length > 120
-                  ? item.answer.slice(0, 120) + '…'
-                  : item.answer;
+                (item.answer ?? '').length > 120
+                  ? (item.answer ?? '').slice(0, 120) + '…'
+                  : item.answer ?? '';
 
               // Parse sources if they're stored as JSON string
               let sources: any[] = [];
@@ -104,11 +104,11 @@ export default function History() {
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1 min-w-0">
-                        <p className="text-body text-cream truncate">{item.query}</p>
+                        <p className="text-body text-cream truncate">{item.query_text}</p>
                         <div className="flex flex-wrap items-center gap-3 text-body-sm text-muted mt-1">
-                          <span className="text-mono text-score">{item.duration_ms.toFixed(0)}ms</span>
+                          <span className="text-mono text-score">{(item.duration_ms ?? 0).toFixed(0)}ms</span>
                           <span>·</span>
-                          <span>{formatDate(item.created_at)}</span>
+                          <span>{formatDate(item.created_at ?? '')}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">

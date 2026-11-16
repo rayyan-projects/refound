@@ -1,0 +1,10 @@
+{
+  "_fixture": "refound-fixture-data",
+  "data": {
+    "status": "duplicate",
+    "document_id": 39,
+    "title": "Docker build cache notes",
+    "source_type": "markdown",
+    "chunks": 18
+  }
+}
