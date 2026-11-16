@@ -30,12 +30,12 @@ def http_error(status: int, headers: dict | None = None) -> requests.HTTPError:
 
 
 class TestChatGPTShareParser:
-    @pytest.mark.parametrize("name", ["chatgpt_share_modern.html", "chatgpt_share_legacy.html"])
+    @pytest.mark.parametrize("name", ["chatgpt_share_modern.html", "chatgpt_share_legacy.html", "chatgpt_share_octane.html"])
     def test_parses_conversation_in_order(self, name):
         doc = ChatGPTShareParser().parse(fixture(name), "https://chatgpt.com/share/x")
         assert doc.title == "FAISS index tuning"
         assert doc.source_type == "chatgpt_share"
-        assert doc.metadata["model"] == "gpt-4o"
+        assert doc.metadata["model"] == ("" if "octane" in name else "gpt-4o")  # octane pages omit it
         assert doc.metadata["url"] == "https://chatgpt.com/share/x"
         text = doc.raw_text
         order = ["pick nlist", "4·√N", "And nprobe?", "nprobe = 8"]
@@ -43,12 +43,22 @@ class TestChatGPTShareParser:
         assert positions == sorted(positions)
         assert [s["text"].split("\n")[0] for s in doc.sections] == ["[USER]", "[ASSISTANT]"] * 2
 
-    @pytest.mark.parametrize("name", ["chatgpt_share_modern.html", "chatgpt_share_legacy.html"])
+    @pytest.mark.parametrize("name", ["chatgpt_share_modern.html", "chatgpt_share_legacy.html", "chatgpt_share_octane.html"])
     def test_skips_system_tool_calls_and_dead_branches(self, name):
         text = ChatGPTShareParser().parse(fixture(name)).raw_text
         assert "You are ChatGPT" not in text
         assert "print(1)" not in text
         assert "STALE BRANCH ANSWER" not in text
+
+    def test_octane_strips_citation_markers(self):
+        text = ChatGPTShareParser().parse(fixture("chatgpt_share_octane.html")).raw_text
+        assert "4·√N." in text and "cite" not in text and "turn0search1" not in text
+        assert "\ue200" not in text
+
+    def test_octane_page_without_messages_fails_loudly(self):
+        html = '<script id="__WEB_MOBILE_DATA__" type="application/json">{"conversation": {"messages": []}}</script>'
+        with pytest.raises(ValueError, match="no readable messages"):
+            ChatGPTShareParser().parse(html)
 
     def test_fails_loudly_on_page_without_conversation(self):
         html = "<html><head><title>ChatGPT</title></head><body><main>Log in</main></body></html>"

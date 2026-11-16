@@ -110,6 +110,35 @@ def build_chatgpt_legacy() -> str:
     )
 
 
+def build_chatgpt_octane() -> str:
+    """Nov 2026 "octane" share page: conversation in __WEB_MOBILE_DATA__."""
+
+    messages = [
+        {"id": "u1", "role": "user", "content": "How do I pick nlist for an IVF index?"},
+        {"id": "a1", "role": "assistant", "source": "server", "renderedHtml": "<p>…</p>",
+         "content": "A common rule of thumb is nlist \u2248 4\u00b7\u221aN.\ue200cite\ue202turn0search1\ue201"},
+        {"id": "s1", "role": "system", "content": "You are ChatGPT."},
+        {"id": "u2", "role": "user", "content": "And nprobe?"},
+        {"id": "a2", "role": "assistant", "content": "Start with nprobe = 8 and raise it until recall plateaus."},
+    ]
+    data = {
+        "conversationSourceProtocol": "2",
+        "conversation": {
+            "messages": messages,
+            "title": "FAISS index tuning",
+            "sharedSource": {"id": "octane-share-1", "kind": "conversation"},
+            "sharedContent": {"title": "FAISS index tuning", "originalCreatedAt": 1792788436550},
+        },
+    }
+    transcript = {"rows": [{"frame": {"role": "user", "text": m["content"]}} for m in messages if m["role"] == "user"]}
+    return (
+        "<!DOCTYPE html><html><head><title>FAISS index tuning</title></head><body>"
+        f'<script id="octane-conversation-transcript" type="application/json">{json.dumps(transcript)}</script>'
+        f'<script id="__WEB_MOBILE_DATA__" type="application/json">{json.dumps(data)}</script>'
+        "</body></html>"
+    )
+
+
 CLAUDE_SNAPSHOT = {
     "uuid": "0f8e6a52-1c2b-4d3e-9f40-5a6b7c8d9e0f",
     "snapshot_name": "Debugging a FastAPI lifespan",
@@ -159,6 +188,7 @@ CLAUDE_EXPORT = [
 def main() -> None:
     (HERE / "chatgpt_share_modern.html").write_text(build_chatgpt_modern(), encoding="utf-8")
     (HERE / "chatgpt_share_legacy.html").write_text(build_chatgpt_legacy(), encoding="utf-8")
+    (HERE / "chatgpt_share_octane.html").write_text(build_chatgpt_octane(), encoding="utf-8")
     (HERE / "claude_snapshot.json").write_text(json.dumps(CLAUDE_SNAPSHOT, indent=2), encoding="utf-8")
     (HERE / "claude_export.json").write_text(json.dumps(CLAUDE_EXPORT, indent=2), encoding="utf-8")
 
