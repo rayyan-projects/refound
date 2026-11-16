@@ -26,7 +26,7 @@ function Section({ id, title, children }: { id: string; title: string; children:
   );
 }
 
-const link = 'text-accent underline underline-offset-2';
+const link = 'inline-flex min-h-11 items-center text-accent underline underline-offset-2 lg:min-h-0';
 
 const SHORTCUTS: { keys: ReactNode; text: string }[] = [
   { keys: <Kbd>{paletteKeys()}</Kbd>, text: 'Search or jump' },
@@ -98,7 +98,7 @@ export default function SettingsPage() {
             the backend has a Gemini key, each question and the passages retrieved for it are sent to Google's Gemini API to write the answer.
             Without a key nothing leaves this machine and you get passages only.
           </p>
-          <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-base">
+          <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-base max-lg:gap-y-0">
             <a className={link} href="https://github.com/rayyan-projects/refound" target="_blank" rel="noreferrer noopener">
               Source on GitHub
             </a>
