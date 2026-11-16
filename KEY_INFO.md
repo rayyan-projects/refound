@@ -1,11 +1,11 @@
-# KEY_INFO — agent context for ReFound (repo: Memory-Trace-)
+# KEY_INFO — agent context for ReFound (repo: rayyan-projects/refound)
 
 Read this before starting work. Keep it current: when you make an intentional/architectural
 decision or discover a gotcha, add it here in the same terse style.
 
 ## 1. What this is
 - Local-first "memory retrieval": import chats/notes → chunk → embed → FAISS → rerank → Gemini answer with citations.
-- Product name in code/UI: **ReFound**. Repo name: Memory-Trace-.
+- Product name in code/UI: **ReFound**. Repo: `rayyan-projects/refound` (moved from `mrkhan3870/Memory-Trace-`; old URLs redirect).
 - Backend: FastAPI (Python 3.12+, tested on 3.13), `backend/`. Frontend: React+Vite+TS+Tailwind, `frontend/`.
 - Human-facing overview: `EXPLAINER.md`. Keep both files in sync when status changes.
 
@@ -40,7 +40,8 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
 - `.json` uploads: `_detect_json_type` → "claude" if first object has `chat_messages`, else "chatgpt".
 
 ## 4. ChatGPT / Claude parsing (decisions — do not regress)
-- All ChatGPT-share and Claude parsing goes through **vendored ChatPeek** (`app/vendor/chatpeek.py`).
+- ChatGPT-share and Claude parsing goes through **vendored ChatPeek** (`app/vendor/chatpeek.py`), plus one
+  ReFound fallback for ChatGPT's newest page format (below).
   - Kept byte-identical to upstream below its license header, including unused CLI/`save_markdown` code,
     so updating = paste new upstream over it. ReFound glue lives in `conversation.py`, the parsers, `url_fetcher.py`.
   - Upstream repo URL/copyright holder was not recorded when vendored — fill it into the header when known.
@@ -48,8 +49,14 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
 - ChatGPT share: `parse_share_html` handles React Router stream (`streamController.enqueue`), post shares (`/s/<id>`),
   and legacy `__NEXT_DATA__`. Follows `linear_conversation` → correct order, no abandoned branches.
   System msgs, tool-addressed msgs, reasoning, tool output are excluded (ExportOptions defaults). Intentional: noise hurts retrieval.
+- ChatGPT "octane" share pages (seen from Nov 2026; ChatPeek doesn't know them): if ChatPeek finds nothing,
+  `chatgpt_share_parser.parse_octane_share` reads `<script id="__WEB_MOBILE_DATA__">` → `conversation.messages`
+  (`role`, markdown `content`; user/assistant only). Raises if fewer user turns than `conversation.userMessageCount`
+  (never index a partial chat). Verified on one real short text-only share; long/multimodal shares not yet checked.
+  Docs from this path still carry `metadata.method == "chatpeek"` (set by `chat_to_document`).
 - Claude share: page HTML is an empty shell. We fetch `https://claude.ai/api/chat_snapshots/<uuid>` JSON directly.
   Cloudflare may 403 from cloud/VPN IPs → surfaces as ShareAccessError (HTTP 403 to the client). Not fixable server-side.
+  UNVERIFIED end to end: the only live attempt (from a cloud session) got the bot challenge; no home-connection test yet.
 - Claude JSON export: reuses `parse_claude_snapshot` per conversation (same message shape). Prefers `content[]`,
   falls back to `text`; null-safe; artifacts included, thinking excluded; empty conversations skipped.
 - **Fail loudly**: no conversation found / zero readable messages → ValueError → HTTP 422. Never fall back to
@@ -93,7 +100,7 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
 - No Alembic migrations despite alembic in requirements; schema changes need create_all on a fresh DB or a migration.
 
 ## 7. Work order (agreed plan)
-1. ✅ ChatGPT + Claude parsers via ChatPeek (this change).
+1. 🟡 ChatGPT + Claude parsers via ChatPeek (PR #17): ChatGPT share verified live; Claude share link not yet.
 2. Verify/fix each remaining "implemented" feature one by one (most are reported not working correctly):
    file import pipeline, chunking quality, embeddings, FAISS persistence/delete, rerank, query stream, history.
 3. Similar Problem Detector. 4. Settings API. 5. Auto-topics. 6. Summarization endpoint. 7. Image import E2E.

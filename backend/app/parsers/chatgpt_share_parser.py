@@ -70,6 +70,16 @@ def parse_octane_share(html: str) -> Chat | None:
         if text:
             replies.append(Reply(author_name=author_name_for_role(role), type=ReplyType(role), statement=text))
 
+    # The page states how many user turns the share has; never index a partial chat.
+    expected = conversation.get("userMessageCount")
+    # Count raw user turns, so an image-only message (no text) isn't mistaken for a missing one.
+    found = sum(1 for m in conversation["messages"] if isinstance(m, dict) and m.get("role") == "user")
+    if isinstance(expected, int) and found < expected:
+        raise ValueError(
+            f"The ChatGPT share page only contained {found} of {expected} user messages; "
+            "refusing to import a partial conversation."
+        )
+
     shared = conversation.get("sharedContent") if isinstance(conversation.get("sharedContent"), dict) else {}
     source = conversation.get("sharedSource") if isinstance(conversation.get("sharedSource"), dict) else {}
     created_ms = shared.get("originalCreatedAt")

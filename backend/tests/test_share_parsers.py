@@ -55,6 +55,13 @@ class TestChatGPTShareParser:
         assert "4·√N." in text and "cite" not in text and "turn0search1" not in text
         assert "\ue200" not in text
 
+    def test_octane_partial_conversation_fails_loudly(self):
+        data = {"conversation": {"userMessageCount": 3, "messages": [
+            {"role": "user", "content": "q1"}, {"role": "assistant", "content": "a1"}]}}
+        html = f'<script id="__WEB_MOBILE_DATA__" type="application/json">{json.dumps(data)}</script>'
+        with pytest.raises(ValueError, match="1 of 3 user messages"):
+            ChatGPTShareParser().parse(html)
+
     def test_octane_page_without_messages_fails_loudly(self):
         html = '<script id="__WEB_MOBILE_DATA__" type="application/json">{"conversation": {"messages": []}}</script>'
         with pytest.raises(ValueError, match="no readable messages"):

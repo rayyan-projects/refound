@@ -36,7 +36,8 @@ Think of it like a librarian:
 - **Claude link** (`claude.ai/share/...`): the page itself is empty, so we ask Claude's public "snapshot" address for the
   conversation data directly.
 - Both use a small open-source library called **ChatPeek**, copied into the project (`backend/app/vendor/`).
-  If ChatGPT or Claude change their websites, updating that one file is usually the fix.
+  If ChatGPT or Claude change their websites, updating that one file is usually the fix. ChatGPT changed its
+  share pages in Nov 2026 to a format ChatPeek doesn't know yet, so we added our own reader for it.
 - Only real ChatGPT/Claude share links are accepted. Random websites are refused on purpose (safety).
 - If something goes wrong, the user gets a clear error ("this is a private link", "link was deleted",
   "Claude blocked the request") instead of junk being saved.
@@ -44,8 +45,12 @@ Think of it like a librarian:
 ## Where things stand
 
 ### ✅ Working and tested
-- **ChatGPT share links**, **Claude share links**, and **Claude JSON exports**: rebuilt on ChatPeek and covered by tests.
-  Known limit: Claude sometimes blocks requests from cloud servers/VPNs. It works from a normal home connection.
+- **ChatGPT share links**: tested with a real link (import + search). Long chats and chats with images not yet tried.
+- **Claude JSON exports**: covered by tests with sample files.
+
+### 🟡 Built, needs a real-world check
+- **Claude share links**: Claude blocks requests from cloud servers, so it hasn't been tried for real yet.
+  It needs one test from a normal home connection.
 
 ### 🟡 Built, but not yet checked properly
 These exist in the code, but the team has reported most of them don't work, or don't work correctly.

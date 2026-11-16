@@ -126,6 +126,7 @@ def build_chatgpt_octane() -> str:
         "conversation": {
             "messages": messages,
             "title": "FAISS index tuning",
+            "userMessageCount": 2,
             "sharedSource": {"id": "octane-share-1", "kind": "conversation"},
             "sharedContent": {"title": "FAISS index tuning", "originalCreatedAt": 1792788436550},
         },
