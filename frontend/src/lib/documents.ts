@@ -1,3 +1,5 @@
+import { FileText, Image as ImageIcon, MessageSquare } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import type { Document, Source } from '../services/api';
 
 export function isUrl(s: string): boolean {
@@ -78,4 +80,11 @@ export function sourceTitle(source: Source, doc?: Document): string {
   if (s && s !== 'Unknown' && !isUrl(s)) return s;
   if (isUrl(source.filename)) return 'Shared conversation';
   return source.filename || 'Unknown document';
+}
+
+/** Source-type icon (section 2.7): the type is told apart by label and call number, not icon colour. */
+export function typeIcon(type: string): LucideIcon {
+  if (type === 'chatgpt' || type === 'chatgpt_share' || type === 'claude') return MessageSquare;
+  if (type === 'image') return ImageIcon;
+  return FileText;
 }

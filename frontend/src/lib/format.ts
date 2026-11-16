@@ -1,4 +1,12 @@
-const dateFmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const dateParts = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'numeric', year: 'numeric' });
+// Fixed three-letter months: newer ICU data renders September as "Sept" in en-GB.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const dateFmt = {
+  format(d: Date): string {
+    const parts = Object.fromEntries(dateParts.formatToParts(d).map((p) => [p.type, p.value]));
+    return `${Number(parts.day)} ${MONTHS[Number(parts.month) - 1]} ${parts.year}`;
+  },
+};
 const timeFmt = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
 const countFmt = new Intl.NumberFormat('en-US');
 

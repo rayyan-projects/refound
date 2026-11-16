@@ -16,7 +16,7 @@ export function PageHeader({
   className?: string;
 }) {
   return (
-    <header className={clsx('mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between', className)}>
+    <header className={clsx('mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between', className)}>
       <div className="min-w-0">
         <h1 tabIndex={-1} className="font-serif text-title font-medium text-ink focus:outline-none md:text-page">
           {title}
