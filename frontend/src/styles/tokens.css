@@ -1,57 +1,65 @@
-  :root {
-    /* ── Surfaces ── */
-    --color-canvas:      #100904;
-    --color-surface:     #1a1410;
-    --color-raised:      #231c16;
-    --color-border:      #2e2520;
-    --color-border-dim:  #1e1a15;
+:root {
+  color-scheme: light;
+  --canvas: #F6F5F2;
+  --surface: #FFFFFF;
+  --sunken: #EEECE7;
+  --raised: #FFFFFF;
+  --hover: #EBEAE7;
+  --active: #E2E1DE;
+  --ink: #1B1A17;
+  --ink-2: #55514A;
+  --ink-3: #67635B;
+  --line: rgba(27, 26, 23, 0.10);
+  --line-strong: rgba(27, 26, 23, 0.20);
+  --control: #8C877E;
+  --accent: #8A5A00;
+  --accent-soft: #F1EBE0;
+  --mark: #FFE39A;
+  --success: #2A6A43;
+  --success-soft: #EAF0EC;
+  --danger: #A8382A;
+  --danger-soft: #F6EBEA;
+  --danger-solid: #A8382A;
+  --on-danger: #FFFFFF;
+  --btn: #1B1A17;
+  --btn-hover: #33312D;
+  --on-btn: #F6F5F2;
+  --overlay: rgba(27, 26, 23, 0.32);
+  --focus: #8A5A00;
+  --shadow-1: 0 1px 2px rgba(27, 26, 23, 0.06);
+  --shadow-2: 0 4px 16px rgba(27, 26, 23, 0.08), 0 1px 2px rgba(27, 26, 23, 0.06);
+  --shadow-3: 0 16px 48px rgba(27, 26, 23, 0.16), 0 2px 6px rgba(27, 26, 23, 0.08);
+}
 
-    /* ── Text ── */
-    --color-cream:       #ffedd7;
-    --color-muted:       #6c5f51;
-    --color-dim:         #3d332a;
-
-    /* ── Accent ── */
-    --color-amber:       #e8a838;
-    --color-amber-glow:  rgba(232, 168, 56, 0.08);
-    --color-amber-dim:   #2a1e00;
-
-    /* ── Semantic ── */
-    --color-success:     #5a8a5a;
-    --color-error:       #8a4a3a;
-
-    /* ── Spacing (as CSS custom properties as well) ── */
-    --space-1:  4px;
-    --space-2:  8px;
-    --space-3:  12px;
-    --space-4:  16px;
-    --space-5:  20px;
-    --space-6:  24px;
-    --space-8:  32px;
-    --space-10: 40px;
-    --space-12: 48px;
-    --space-16: 64px;
-    --space-20: 80px;
-    --space-24: 96px;
-
-    --layout-max:      1100px;
-    --layout-padding:  24px;
-    --section-gap:     96px;
-
-    --radius-sm:   4px;
-    --radius-md:   8px;
-    --radius-lg:   12px;
-    --radius-pill: 9999px;
-  }
-
-  /* Light mode overrides (will be toggled later) */
-  [data-theme="light"] {
-    --color-canvas:     #f5f0e8;
-    --color-surface:    #ffffff;
-    --color-raised:     #ede8df;
-    --color-border:     #d4cdc2;
-    --color-border-dim: #e8e2d8;
-    --color-cream:      #1a1410;
-    --color-muted:      #7a6e60;
-    --color-dim:        #b0a89a;
-  }
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: #141311;
+  --surface: #1B1A17;
+  --sunken: #0F0E0D;
+  --raised: #232220;
+  --hover: #252421;
+  --active: #2D2C29;
+  --ink: #ECE9E3;
+  --ink-2: #B5B0A7;
+  --ink-3: #9A958C;
+  --line: rgba(236, 233, 227, 0.10);
+  --line-strong: rgba(236, 233, 227, 0.20);
+  --control: #7D786F;
+  --accent: #E8A838;
+  --accent-soft: #342B1B;
+  --mark: #5A4310;
+  --success: #86B892;
+  --success-soft: #262A23;
+  --danger: #EC8C7B;
+  --danger-soft: #302521;
+  --danger-solid: #C6513F;
+  --on-danger: #FFFFFF;
+  --btn: #ECE9E3;
+  --btn-hover: #FFFFFF;
+  --on-btn: #141311;
+  --overlay: rgba(0, 0, 0, 0.56);
+  --focus: #E8A838;
+  --shadow-1: none;
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.40);
+  --shadow-3: 0 16px 48px rgba(0, 0, 0, 0.56);
+}
