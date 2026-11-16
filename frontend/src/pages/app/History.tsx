@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { PageLayout } from '../../components/layout/PageLayout';
 import { useBackend } from '../../hooks/useBackend';
 import { getHistory, type QueryHistoryItem } from '../../services/api';
-import { motion, AnimatePresence } from 'motion/react';
 
 export default function History() {
   const { backendUrl } = useBackend();
@@ -124,13 +123,8 @@ export default function History() {
                   </button>
 
                   {/* Expanded content */}
-                  <AnimatePresence>
                     {isExpanded && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: [0.0, 0.0, 0.2, 1.0] }}
+                      <div
                         className="overflow-hidden"
                       >
                         <div className="px-4 pb-4 pt-1 border-t border-border-dim">
@@ -169,9 +163,8 @@ export default function History() {
                             </div>
                           )}
                         </div>
-                      </motion.div>
+                      </div>
                     )}
-                  </AnimatePresence>
                 </div>
               );
             })}

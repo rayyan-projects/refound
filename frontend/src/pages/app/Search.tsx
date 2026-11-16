@@ -6,8 +6,6 @@ import { SourceCard } from '../../components/ui/SourceCard';
 import { useBackend } from '../../hooks/useBackend';
 import { useQueryState } from '../../hooks/useQueryState';
 import { listDocuments, queryMemoryStreaming } from '../../services/api';
-import { SplitText } from '../../components/ui/SplitText';
-import { motion } from 'motion/react';
 
 export default function Search() {
   const { backendUrl } = useBackend();
@@ -112,7 +110,7 @@ export default function Search() {
 
         {/* Headline */}
         <h1 className="text-display font-display font-bold text-cream mb-8 text-center">
-          <SplitText text="Ask anything." />
+          Ask anything.
         </h1>
 
         {/* Search input */}
@@ -162,29 +160,19 @@ export default function Search() {
 
         {/* Sources grid with stagger */}
 {sources.length > 0 && (
-  <motion.div
+  <div
     className="mt-8 max-w-[680px] w-full"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ delay: 0.2 }}
   >
     <div className="grid grid-cols-1 gap-3">
       {sources.map((source, idx) => (
-        <motion.div
+        <div
           key={idx}
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.4,
-            delay: 0.2 + idx * 0.08,
-            ease: [0.0, 0.0, 0.2, 1.0],
-          }}
         >
           <SourceCard source={source} />
-        </motion.div>
+        </div>
       ))}
     </div>
-  </motion.div>
+  </div>
 )}
       </div>
     </PageLayout>

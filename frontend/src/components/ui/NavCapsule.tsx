@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useBackend } from '../../hooks/useBackend';
 import { useTheme } from '../../hooks/useTheme';
-import { motion } from 'motion/react';
 
 interface NavCapsuleProps {
   /** If true, shows app links (Search, Import, History). Otherwise shows "Connect" CTA. */
@@ -59,15 +58,13 @@ export function NavCapsule({ isAppMode = false }: NavCapsuleProps) {
       </div>
 
       {/* Theme toggle */}
-      <motion.button
+      <button
         onClick={toggle}
         className="text-muted hover:text-cream transition-colors ml-1 text-label"
         aria-label="Toggle theme"
-        whileTap={{ rotate: 180 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         {theme === 'dark' ? '☀️' : '🌙'}
-      </motion.button>
+      </button>
     </nav>
   );
 }

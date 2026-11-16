@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
 import { BackendModal } from '../components/ui/BackendModal';
 import { NavCapsule } from '../components/ui/NavCapsule';
@@ -33,7 +32,7 @@ const process = [
 ];
 
 function BootOverlay({ onComplete }: { onComplete: () => void }) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = false;
 
   useEffect(() => {
     const timer = window.setTimeout(onComplete, reduceMotion ? 450 : 1750);
@@ -41,40 +40,28 @@ function BootOverlay({ onComplete }: { onComplete: () => void }) {
   }, [onComplete, reduceMotion]);
 
   return (
-    <motion.div
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: reduceMotion ? 0.2 : 0.7 }}
+    <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-canvas"
       aria-label="Loading ReFound"
     >
       <div className="relative w-64 text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 0.7 }}
+        <div
           className="font-display text-5xl font-bold tracking-[-0.08em]"
         >
           RF<span className="text-amber">.</span>
-        </motion.div>
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.55 }}
+        </div>
+        <p
           className="mt-4 text-label uppercase tracking-[0.28em] text-muted"
         >
           Finding your way back
-        </motion.p>
+        </p>
         <div className="mt-8 h-px overflow-hidden bg-border">
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ delay: 0.45, duration: reduceMotion ? 0.2 : 1.1, ease: [0.2, 0.6, 0.2, 1] }}
+          <div
             className="h-full origin-left bg-amber"
           />
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -95,11 +82,7 @@ function ProductWalkthrough() {
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 35, rotateX: 8 }}
-          whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-          viewport={{ once: true, margin: '-100px' }}
-          transition={{ duration: 0.9, ease: [0.2, 0.6, 0.2, 1] }}
+        <div
           className="relative overflow-hidden border border-border bg-surface/70 shadow-[0_28px_90px_rgba(0,0,0,0.35)]"
         >
           <div className="flex items-center justify-between border-b border-border-dim px-5 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
@@ -110,23 +93,19 @@ function ProductWalkthrough() {
             <div className="border-b border-border-dim pb-5 font-mono text-sm text-cream">
               <span className="mr-3 text-amber">&gt;</span> What did I write about keeping systems private?
             </div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.35, duration: 0.7 }}
+            <div
               className="py-6"
             >
               <p className="text-body leading-relaxed text-cream">Your notes return to the same principle: keep computation close to the source, expose the reasoning, and make ownership visible.</p>
               <p className="mt-4 border-l-2 border-amber pl-4 text-body-sm leading-relaxed text-muted">ReFound keeps retrieval local and cites the passages used to form this answer.</p>
-            </motion.div>
+            </div>
             <div className="space-y-2 border-t border-border-dim pt-5 font-mono text-[11px] text-muted">
               <div className="flex items-center justify-between"><span>01 / privacy-notes.md</span><span className="text-amber">0.94</span></div>
               <div className="flex items-center justify-between"><span>02 / architecture-chat.json</span><span className="text-amber">0.87</span></div>
               <div className="flex items-center justify-between"><span>03 / local-first.txt</span><span className="text-amber">0.81</span></div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -136,15 +115,11 @@ function MemoryFlow() {
   return (
     <div className="relative mt-20 hidden h-20 md:block">
       <svg viewBox="0 0 1000 80" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
-        <motion.path
+        <path
           d="M 40 40 C 230 5, 300 75, 500 40 S 770 5, 960 40"
           fill="none"
           stroke="rgba(232,168,56,0.55)"
           strokeWidth="1"
-          initial={{ pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.8, ease: [0.2, 0.6, 0.2, 1] }}
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-between">
@@ -172,9 +147,7 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen overflow-hidden bg-canvas text-cream">
-      <AnimatePresence>
         {isBooting && <BootOverlay onComplete={() => setIsBooting(false)} />}
-      </AnimatePresence>
       <NavCapsule isAppMode={false} />
 
       <main>
@@ -183,10 +156,7 @@ export default function Landing() {
           <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-2/3 bg-[#e0683a]/5 blur-[100px]" />
 
           <div className="relative z-10 mx-auto grid w-full max-w-layout items-center gap-16 lg:grid-cols-[1.05fr_0.95fr]">
-            <motion.div
-              initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.8, ease: [0.2, 0.6, 0.2, 1] }}
+            <div
             >
               <p className="mb-5 text-label font-label uppercase tracking-[0.24em] text-amber">Rediscover what you already know</p>
               <h1 className="max-w-4xl text-[clamp(3.4rem,8vw,8rem)] font-display font-bold leading-[0.88] tracking-[-0.07em]">
@@ -205,12 +175,9 @@ export default function Landing() {
                 </button>
                 <span className="text-label uppercase tracking-[0.18em] text-dim">No cloud / no tracking</span>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 34 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3, duration: 0.9 }}
+            <div
               className="relative mx-auto h-[25rem] w-full max-w-md"
             >
               <div className="absolute right-[10%] top-[8%] h-40 w-40 rotate-12 border border-amber/40 bg-amber/5 shadow-[20px_24px_80px_rgba(232,168,56,0.14)] [transform:perspective(700px)_rotateX(46deg)_rotateZ(14deg)]" />
@@ -218,7 +185,7 @@ export default function Landing() {
               <div className="absolute bottom-[5%] right-[18%] h-44 w-64 border border-[#5a8a9a]/40 bg-[#5a8a9a]/5 [transform:perspective(700px)_rotateX(55deg)_rotateY(18deg)_rotateZ(8deg)]" />
               <div className="absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_35%_30%,#ffedd7,#e8a838_30%,#513217_70%,#100904)] shadow-[0_0_70px_rgba(232,168,56,0.3)]" />
               <div className="absolute bottom-0 left-0 border-l border-amber/50 pl-3 font-mono text-xs leading-relaxed text-muted">LOCAL INDEX<br /><span className="text-amber">READY TO SEARCH</span></div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -231,20 +198,16 @@ export default function Landing() {
               <h2 className="mt-4 text-heading font-display font-bold leading-tight">A short path from scattered material to useful memory.</h2>
             </div>
             <div className="space-y-4">
-              {panels.map((panel, index) => (
-                <motion.article
+              {panels.map((panel) => (
+                <article
                   key={panel.number}
-                  initial={{ opacity: 0, x: index % 2 ? 42 : -42 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: '-70px' }}
-                  transition={{ duration: 0.65, delay: index * 0.08 }}
-                  className="group relative grid gap-6 overflow-hidden border border-border bg-surface/50 px-6 py-7 transition duration-500 hover:-translate-y-1 hover:border-amber/50 hover:bg-raised/70 md:grid-cols-[7rem_1fr_1.4fr] md:items-center md:px-8"
+                  className="group relative grid gap-6 overflow-hidden border border-border bg-surface/50 px-6 py-7 duration-500 hover:-translate-y-1 hover:border-amber/50 hover:bg-raised/70 md:grid-cols-[7rem_1fr_1.4fr] md:items-center md:px-8"
                 >
                   <div className={`absolute inset-y-0 left-0 w-1 ${panel.accent}`} />
                   <span className="font-mono text-4xl text-muted transition-colors group-hover:text-amber">{panel.number}</span>
                   <h3 className="text-heading-sm font-display font-bold">{panel.title}</h3>
                   <p className="max-w-lg text-body text-muted">{panel.text}</p>
-                </motion.article>
+                </article>
               ))}
             </div>
             <MemoryFlow />
@@ -260,27 +223,19 @@ export default function Landing() {
             </div>
             <div className="relative pl-8 md:pl-16">
               <div className="absolute bottom-0 left-2 top-0 w-px bg-border md:left-8" />
-              <motion.div
-                initial={{ scaleY: 0 }}
-                whileInView={{ scaleY: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.4, ease: [0.2, 0.6, 0.2, 1] }}
+              <div
                 className="absolute left-2 top-0 h-full w-px origin-top bg-gradient-to-b from-amber via-[#e0683a] to-[#5a8a9a] md:left-8"
               />
               <div className="space-y-20">
                 {process.map(([number, title, text]) => (
-                  <motion.div
+                  <div
                     key={number}
-                    initial={{ opacity: 0, y: 22 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-100px' }}
-                    transition={{ duration: 0.6 }}
                     className="relative"
                   >
                     <span className="absolute -left-[2.05rem] top-0 flex h-8 w-8 items-center justify-center rounded-full border border-amber bg-canvas font-mono text-[10px] text-amber md:-left-[3.05rem]">{number}</span>
                     <h3 className="text-heading-sm font-display font-bold">{title}</h3>
                     <p className="mt-3 max-w-lg text-body text-muted">{text}</p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
