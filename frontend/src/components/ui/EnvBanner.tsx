@@ -9,7 +9,7 @@ import { useBackend } from '../../hooks/useBackend';
 
 const BRANCH = __APP_BRANCH__;
 const COMMIT = __APP_COMMIT__.slice(0, 7);
-const DOCS_URL = 'https://github.com/mrkhan3870/Memory-Trace-/blob/main/docs/DEPLOYMENT.md';
+const DOCS_URL = 'https://github.com/rayyan-projects/refound/blob/main/docs/DEPLOYMENT.md';
 
 interface ManifestPR {
   number: number;

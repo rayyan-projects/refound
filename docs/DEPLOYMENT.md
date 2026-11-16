@@ -65,7 +65,7 @@ included.
 
 ### Cloudflare Pages
 1. In Cloudflare, go to **Workers & Pages → Create → Pages → Connect to Git** and choose
-   `mrkhan3870/Memory-Trace-`.
+   `rayyan-projects/refound`.
 2. Build settings:
    - Framework preset: *None* (or Vite)
    - Root directory: `frontend`
