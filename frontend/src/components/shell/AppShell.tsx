@@ -1,10 +1,12 @@
 import { Suspense, useEffect, useRef } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useBackendStatus } from '../../hooks/useBackendStatus';
+import { useHotkeys } from '../../hooks/useHotkeys';
 import { setNavigator } from '../../state/navigation';
 import { toast } from '../../state/toasts';
 import { Toaster } from '../ui/Toaster';
 import { buttonClasses } from '../ui/buttonStyles';
+import { CommandPalette } from './CommandPalette';
 import { DropOverlay } from './DropOverlay';
 import { OfflineBanner } from './OfflineBanner';
 import { PageLoading } from './PageLoading';
@@ -24,6 +26,7 @@ export function AppShell() {
   const { status } = useBackendStatus();
   const first = useRef(true);
   const prevStatus = useRef(status);
+  useHotkeys();
 
   useEffect(() => {
     setNavigator((path) => navigate(path));
@@ -76,6 +79,7 @@ export function AppShell() {
       </div>
       <TabBar />
       <DropOverlay />
+      <CommandPalette />
       <Toaster />
     </div>
   );
