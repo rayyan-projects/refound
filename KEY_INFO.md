@@ -7,7 +7,7 @@ decision or discover a gotcha, add it here in the same terse style.
 - Local-first "memory retrieval": import chats/notes → chunk → embed → FAISS → rerank → Gemini answer with citations.
 - Product name in code/UI: **ReFound**. Repo: `rayyan-projects/refound` (moved from `mrkhan3870/Memory-Trace-`; old URLs redirect).
 - Backend: FastAPI (Python 3.12+, tested on 3.13), `backend/`. Frontend: React+Vite+TS+Tailwind, `frontend/`.
-- Human-facing overview: `EXPLAINER.md`. Keep both files in sync when status changes.
+- Human-facing overview: `EXPLAINER.md`. Task board: `TASKS.md`. Keep all three in sync when status changes.
 
 ## 2. Layout (backend)
 ```
@@ -113,23 +113,10 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
 - README says `cp ../.env.example`; the file is `backend/.env.example`. `backend/test.txt` is a stray UTF-16 file.
 - No Alembic migrations despite alembic in requirements; schema changes need create_all on a fresh DB or a migration.
 
-## 7. Open items / status board (keep current; newest state wins)
-- **UAT / previews (branch `ci/frontend-previews-and-uat`, not merged):** Cloudflare Pages + `uat` branch assembled by
-  `.github/workflows/uat.yml`. Full guide: `docs/DEPLOYMENT.md` (on that branch). Blocked on teammate: accept
-  org invite → connect Cloudflare Pages to `rayyan-projects/refound` → report project name. Then: set repo variable
-  `PAGES_PROJECT` (also switches the workflow on), update `cors_origin_regex` default in `backend/config.py` if the
-  name isn't `refound-24j`, merge, run the workflow once, live test (2 PRs editing the same line → newest push wins).
-  The fork demo (`AnserAliKhan/Memory-Trace`, `refound-24j.pages.dev`) proved build/deploy only, not PR merging.
-- **Import follow-ups:** remove Claude-link UI wording (§4 TODO); live-test a long (40+ msg) and an image ChatGPT
-  share; find ChatPeek's upstream URL (header has none) to check for octane support.
-- **UI bugs:** the four frontend items in §6 (raw error JSON, score %, URL instead of title, markdown escapes).
-- **Repo tidying:** delete `claude/cool-pascal-uzoygj` (superseded by #18; the agent session lacked delete rights)
-  and optionally the merged `stage-*`, `frontend/dev`, `feat/landing-v2-base` branches.
-- **Branch naming:** use descriptive names (`feat/...`, `fix/...`, `ci/...`, `docs/...`), not generated ones.
+## 7. Tasks and status
+Moved to `TASKS.md` (the to-do board: done / in progress / blocked / not started). Keep this file for
+decisions and repo knowledge only.
 
-## 8. Work order (agreed plan)
-1. ✅ ChatGPT share links (verified live) + Claude JSON exports (PR #18). Claude share links disabled — see §4.
-2. Verify/fix each remaining "implemented" feature one by one (most are reported not working correctly):
-   file import pipeline, chunking quality, embeddings, FAISS persistence/delete, rerank, query stream, history.
-3. Similar Problem Detector. 4. Settings API. 5. Auto-topics. 6. Summarization endpoint. 7. Image import E2E.
-8. Batch import. 9. Export/backup.
+## 8. Conventions
+- Branch names describe the work: `feat/...`, `fix/...`, `ci/...`, `docs/...`, never generated ones.
+- Update `TASKS.md` in the same PR that changes a task's state; update this file when a decision changes.

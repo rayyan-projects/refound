@@ -86,6 +86,8 @@ It's built (branch `ci/frontend-previews-and-uat`, guide in `docs/DEPLOYMENT.md`
 to connect Cloudflare to the organization repo.
 
 ## What's next
+The full, up-to-date task list (including half-done work) is in `TASKS.md`.
+
 1. ✅ Fix ChatGPT importing (done; Claude share links turned off for now)
 2. Go through each "built but unchecked" feature one by one: test it, fix it
 3. Build the Similar Problem Detector
