@@ -203,7 +203,7 @@ function PaletteBody() {
                       onMouseDown={(e) => e.preventDefault()}
                       onClick={() => select(o)}
                       className={clsx(
-                        'mx-1.5 flex h-10 items-center gap-3 rounded px-3 text-base transition-colors duration-fast ease-out',
+                        'mx-1.5 flex h-10 items-center gap-3 rounded px-3 text-base transition-colors duration-fast ease-out max-lg:h-11',
                         o.disabled ? 'cursor-not-allowed text-ink-3' : 'cursor-pointer text-ink-2 active:bg-active',
                         isActive && 'bg-hover text-ink',
                       )}

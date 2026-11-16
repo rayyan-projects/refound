@@ -21,7 +21,8 @@ function Status({ doc }: { doc: Document }) {
         Indexing
       </Tag>
     );
-  return <span className="text-xs text-ink-3">Indexed</span>;
+  // The normal case stays quiet; on narrow screens it is left out to give the title room.
+  return <span className="hidden text-xs text-ink-3 md:inline">Indexed</span>;
 }
 
 export function DocumentRow({
