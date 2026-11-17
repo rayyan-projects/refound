@@ -9,7 +9,7 @@ export function TopicTags({ topics }: { topics: string[] }) {
       {shown.map((t) => (
         <Tag key={t}>{t}</Tag>
       ))}
-      {rest > 0 && <span className="font-mono text-xs tabular-nums text-ink-3">+{rest}</span>}
+      {rest > 0 && <span className="text-xs tabular-nums text-ink-3">+{rest}</span>}
     </span>
   );
 }

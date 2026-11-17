@@ -33,7 +33,7 @@ function DetailSkeleton() {
   return (
     <div aria-hidden="true" className="flex flex-col gap-4">
       <Skeleton className="h-6 w-3/4" />
-      <div className="flex flex-col gap-4 rounded-lg border border-line bg-surface p-6 md:p-8">
+      <div className="flex flex-col gap-4 py-2">
         <Skeleton className="h-3.5 w-full" />
         <Skeleton className="h-3.5 w-11/12" />
         <Skeleton className="h-3.5 w-5/6" />

@@ -69,12 +69,12 @@ export default function AskPage() {
           {docs.loading ? (
             <Skeleton className="h-3 w-48" />
           ) : docs.data ? (
-            <p className="font-mono text-xs tabular-nums text-ink-3">
+            <p className="text-xs tabular-nums text-ink-3">
               {libraryEmpty ? '0 documents' : `${plural(docCount, 'document', 'documents')} · ${plural(passages, 'passage', 'passages')}`}
             </p>
           ) : null}
         </div>
-        <h1 tabIndex={-1} className="mb-6 mt-2 font-serif text-title font-medium text-ink focus:outline-none md:text-page">
+        <h1 tabIndex={-1} className="mb-6 mt-2 font-display text-title font-extrabold text-ink focus:outline-none md:text-page">
           Ask your library
         </h1>
         <div className="max-w-measure">
@@ -143,7 +143,7 @@ export default function AskPage() {
   const footer =
     run.status === 'done' || run.status === 'stopped' ? (
       <>
-        <span className="font-mono text-xs tabular-nums text-ink-3">
+        <span className="text-xs tabular-nums text-ink-3">
           {run.status === 'stopped'
             ? 'Stopped'
             : [plural(run.sources?.length ?? 0, 'passage', 'passages'), formatDuration(run.durationMs)].filter(Boolean).join(' · ')}
@@ -241,7 +241,7 @@ export default function AskPage() {
           </>
         )}
       </div>
-      <h1 tabIndex={-1} className="mb-6 mt-2 max-w-measure break-words font-serif text-title font-medium text-ink focus:outline-none">
+      <h1 tabIndex={-1} className="mb-6 mt-2 max-w-measure break-words font-display text-title font-bold text-ink focus:outline-none">
         {run.question}
       </h1>
       <div className="max-w-measure">

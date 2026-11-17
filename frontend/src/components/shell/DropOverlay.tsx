@@ -78,7 +78,7 @@ export function DropOverlay() {
         <span className="mb-2 text-ink-3">
           <Icon icon={Upload} size={20} />
         </span>
-        <p className="font-serif text-title font-medium text-ink">{online ? 'Drop to import' : 'The backend is offline'}</p>
+        <p className="font-display text-title font-bold text-ink">{online ? 'Drop to import' : 'The backend is offline'}</p>
         <p className="text-base text-ink-2">{online ? 'Files are indexed on your machine' : 'Reconnect, then drop the files again'}</p>
       </div>
     </div>

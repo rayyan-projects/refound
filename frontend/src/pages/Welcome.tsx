@@ -27,7 +27,7 @@ export default function Welcome() {
   return (
     <div className="flex min-h-dvh flex-col bg-canvas text-ink">
       <header className="flex h-14 shrink-0 items-center justify-between px-4 md:px-6 lg:px-10">
-        <span className="font-serif text-lg font-medium text-ink">ReFound</span>
+        <span className="font-display text-lg font-extrabold text-ink">ReFound</span>
         <IconButton
           icon={dark ? Sun : Moon}
           label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
@@ -43,7 +43,7 @@ export default function Welcome() {
       ) : (
         <main className="mx-auto grid w-full max-w-content flex-1 grid-cols-1 items-center gap-16 px-4 py-10 md:px-6 lg:grid-cols-12 lg:px-10">
           <div className="flex min-w-0 flex-col lg:col-span-5">
-            <h1 tabIndex={-1} className="font-serif text-page font-medium text-ink focus:outline-none md:text-display">
+            <h1 tabIndex={-1} className="font-display text-page font-medium text-ink focus:outline-none md:text-display">
               Find what you already worked out
             </h1>
             <p className="mt-4 max-w-narrow text-md text-ink-2">

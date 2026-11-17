@@ -68,8 +68,8 @@ export function AskComposer({
       role="search"
       onSubmit={submit}
       className={clsx(
-        'flex flex-col rounded-lg border border-control bg-surface p-2 transition-colors duration-fast ease-out focus-within:outline focus-within:outline-2 focus-within:outline-offset-0 focus-within:outline-focus',
-        disabled ? 'cursor-not-allowed bg-sunken opacity-50' : 'hover:border-ink-3',
+        'flex flex-col rounded-sm border-b border-control pb-1 transition-colors duration-fast ease-out focus-within:border-ink-3 focus-within:outline focus-within:outline-2 focus-within:outline-offset-4 focus-within:outline-focus',
+        disabled ? 'cursor-not-allowed opacity-50' : 'hover:border-ink-3',
       )}
     >
       <div className={clsx('flex items-end gap-2', lg ? 'min-h-10' : 'min-h-7')}>
@@ -84,8 +84,8 @@ export function AskComposer({
           onChange={(e) => setValue(e.target.value)}
           onKeyDown={onKeyDown}
           className={clsx(
-            'block min-w-0 flex-1 resize-none bg-transparent px-2 py-2 text-ink placeholder:text-ink-3 focus-visible:outline-none disabled:cursor-not-allowed',
-            lg ? 'text-md md:text-lg' : 'text-md',
+            'block min-w-0 flex-1 resize-none bg-transparent px-0 py-2 font-medium tracking-tight text-ink placeholder:text-ink-3 focus-visible:outline-none disabled:cursor-not-allowed',
+            lg ? 'text-lg md:text-title' : 'text-md md:text-lg',
           )}
         />
         {asking ? (
@@ -97,7 +97,7 @@ export function AskComposer({
         )}
       </div>
       {lg && (
-        <p className="hidden items-center gap-1.5 px-2 pb-1 pt-1 text-xs text-ink-3 md:flex">
+        <p className="hidden items-center gap-1.5 pb-1 pt-1 text-xs text-ink-3 md:flex">
           <Kbd>↵</Kbd> to ask
           <span aria-hidden="true" className="px-1">
             ·

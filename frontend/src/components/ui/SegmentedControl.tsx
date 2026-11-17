@@ -70,7 +70,7 @@ export function SegmentedControl({
             >
               {o.icon && <Icon icon={o.icon} />}
               {o.label}
-              {o.count !== undefined && <span className="font-mono text-xs tabular-nums text-ink-3">{o.count}</span>}
+              {o.count !== undefined && <span className="text-xs tabular-nums text-ink-3">{o.count}</span>}
             </button>
           );
         })}

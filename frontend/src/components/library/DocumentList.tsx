@@ -45,7 +45,7 @@ export function DocumentList({
   empty?: ReactNode;
 }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-surface">
+    <div className="border-y border-line">
       {docs.length === 0 && empty ? (
         <div className="px-6">{empty}</div>
       ) : (
@@ -64,7 +64,7 @@ export function DocumentList({
 
 export function DocumentListSkeleton() {
   return (
-    <div aria-busy="true" className="overflow-hidden rounded-lg border border-line bg-surface">
+    <div aria-busy="true" className="border-y border-line">
       <span className="sr-only">Loading</span>
       <div className="hidden h-9 border-b border-line md:block" />
       {Array.from({ length: 8 }, (_, i) => (

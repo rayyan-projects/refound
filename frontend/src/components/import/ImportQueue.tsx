@@ -43,7 +43,7 @@ export function ImportQueue() {
           >
             <div className="h-full rounded-full bg-ink-2" style={{ width: `${(finished.length / Math.max(1, items.length)) * 100}%` }} />
           </div>
-          <span className="font-mono text-xs tabular-nums text-ink-3">
+          <span className="text-xs tabular-nums text-ink-3">
             {finished.length} of {items.length}
           </span>
         </div>
@@ -51,7 +51,7 @@ export function ImportQueue() {
       {items.length === 0 ? (
         <p className="text-sm text-ink-3">Imports from this session appear here</p>
       ) : (
-        <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line bg-surface">
+        <ul className="divide-y divide-line border-y border-line">
           {items.map((item) => (
             <ImportQueueItem
               key={item.id}

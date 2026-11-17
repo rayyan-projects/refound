@@ -58,7 +58,7 @@ export function Dialog({
             size === 'md' ? 'w-dialog md:w-dialog-md' : 'w-dialog',
           )}
         >
-          <h2 id={titleId} className="font-serif text-title font-medium text-ink">
+          <h2 id={titleId} className="font-display text-title font-bold text-ink">
             {title}
           </h2>
           {description && (

@@ -28,7 +28,7 @@ function NavRow({ item, count }: { item: NavItem; count?: number | null }) {
           <Icon icon={item.icon} />
           <span className="flex-1">{item.label}</span>
           {count !== null && count !== undefined && (
-            <span className="font-mono text-xs tabular-nums text-ink-3">{formatCount(count)}</span>
+            <span className="text-xs tabular-nums text-ink-3">{formatCount(count)}</span>
           )}
         </>
       )}
@@ -41,7 +41,7 @@ export function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-20 hidden w-sidebar flex-col border-r border-line bg-sunken p-3 lg:flex">
       <div className="flex h-14 shrink-0 items-center px-2">
-        <Link to="/ask" className="rounded-sm font-serif text-lg font-medium text-ink">
+        <Link to="/ask" className="rounded-sm font-display text-lg font-extrabold text-ink">
           ReFound
         </Link>
       </div>

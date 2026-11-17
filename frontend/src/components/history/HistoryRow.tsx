@@ -21,7 +21,7 @@ export function HistoryRow({ item, selected }: { item: HistoryItem; selected: bo
     >
       {selected && <span aria-hidden="true" className="absolute left-0 top-3 h-4 w-0.5 rounded-full bg-accent" />}
       <span className="line-clamp-2 break-words text-base text-ink" title={item.query_text}>{item.query_text || 'Untitled question'}</span>
-      {meta.length > 0 && <span className="mt-0.5 font-mono text-xs tabular-nums text-ink-3">{meta.join(' · ')}</span>}
+      {meta.length > 0 && <span className="mt-0.5 text-xs tabular-nums text-ink-3">{meta.join(' · ')}</span>}
     </Link>
   );
 }

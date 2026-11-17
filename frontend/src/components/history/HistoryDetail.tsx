@@ -71,7 +71,7 @@ export function HistoryDetail({ item, docs, offline }: { item: HistoryItem; docs
   return (
     <article className="flex min-w-0 flex-col gap-4">
       <div>
-        <h2 className="break-words font-serif text-title font-medium text-ink">{item.query_text}</h2>
+        <h2 className="break-words font-display text-title font-bold text-ink">{item.query_text}</h2>
         <p className="mt-1 text-xs text-ink-3">{formatDateTime(parseServerDate(item.created_at))}</p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button variant="primary" size="sm" icon={RotateCw} onClick={askAgain} disabled={offline}>

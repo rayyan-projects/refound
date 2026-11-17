@@ -22,10 +22,10 @@ export function Callout({
     <div
       role={tone === 'danger' ? 'alert' : 'status'}
       className={clsx(
-        'flex gap-3 rounded-lg border border-line p-4',
-        tone === 'neutral' && 'bg-sunken',
-        tone === 'danger' && 'bg-danger-soft',
-        tone === 'success' && 'bg-success-soft',
+        'flex gap-3 border-l-2 py-1 pl-4',
+        tone === 'neutral' && 'border-line-strong',
+        tone === 'danger' && 'border-danger',
+        tone === 'success' && 'border-success',
         className,
       )}
     >

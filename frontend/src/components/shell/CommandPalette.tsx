@@ -61,7 +61,7 @@ function PaletteBody() {
             icon: ArrowUp,
             label: `Ask "${q}"`,
             disabled: offline,
-            meta: offline ? <span className="font-mono text-xs text-ink-3">Offline</span> : undefined,
+            meta: offline ? <span className="text-xs text-ink-3">Offline</span> : undefined,
             run: () => {
               void ask(q);
               navigate(`/ask?q=${encodeURIComponent(q)}`);
@@ -101,7 +101,7 @@ function PaletteBody() {
           id: `d-${d.id}`,
           icon: typeIcon(d.source_type),
           label: displayTitle(d),
-          meta: <span className="font-mono text-xs tabular-nums text-ink-3">{callNumber(d)}</span>,
+          meta: <span className="text-xs tabular-nums text-ink-3">{callNumber(d)}</span>,
           run: go(`/library?q=${encodeURIComponent(displayTitle(d))}`),
         }));
       if (docs.loading) out.push({ heading: 'Documents', options: [], loading: true });

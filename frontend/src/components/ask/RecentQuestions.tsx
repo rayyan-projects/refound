@@ -13,7 +13,7 @@ export function RecentQuestions({ items, loading }: { items: HistoryItem[]; load
     <section className="mt-10">
       <h2 className="mb-2 text-sm font-medium text-ink-2">Recent questions</h2>
       {loading ? (
-        <div aria-busy="true" className="divide-y divide-line overflow-hidden rounded-lg border border-line bg-surface">
+        <div aria-busy="true" className="divide-y divide-line border-y border-line">
           <span className="sr-only">Loading</span>
           {[0, 1, 2].map((i) => (
             <div key={i} className="flex h-11 items-center gap-3 px-4">
@@ -25,7 +25,7 @@ export function RecentQuestions({ items, loading }: { items: HistoryItem[]; load
           ))}
         </div>
       ) : (
-        <ul className="divide-y divide-line overflow-hidden rounded-lg border border-line bg-surface">
+        <ul className="divide-y divide-line border-y border-line">
           {items.slice(0, 5).map((item) => (
             <li key={item.id}>
               <button

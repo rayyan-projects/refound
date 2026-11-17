@@ -38,7 +38,7 @@ export function ConnectionHelp({ url }: { url: string }) {
       <ol className="mt-1 flex list-decimal flex-col gap-2 pl-5 text-base text-ink">
         <li>
           Start it:
-          <div className="relative mt-2 rounded bg-surface p-3 pr-24">
+          <div className="relative mt-2 rounded bg-sunken p-3 pr-24">
             <pre className="whitespace-pre-wrap break-words font-mono text-sm text-ink">{START}</pre>
             <Button variant="ghost" size="sm" icon={copied ? Check : Copy} onClick={() => void copy()} className="absolute right-1.5 top-1.5">
               {copied ? 'Copied' : 'Copy'}
@@ -49,8 +49,8 @@ export function ConnectionHelp({ url }: { url: string }) {
         {origin !== 'http://localhost:5173' && (
           <li>
             This page is served from <span className="font-mono text-sm">{origin}</span>. Set{' '}
-            <code className="rounded-sm bg-surface px-1 font-mono text-sm">FRONTEND_ORIGIN={origin}</code> in{' '}
-            <code className="rounded-sm bg-surface px-1 font-mono text-sm">backend/.env</code> and restart the backend, or the browser will block the
+            <code className="rounded-sm bg-sunken px-1 font-mono text-sm">FRONTEND_ORIGIN={origin}</code> in{' '}
+            <code className="rounded-sm bg-sunken px-1 font-mono text-sm">backend/.env</code> and restart the backend, or the browser will block the
             connection
           </li>
         )}

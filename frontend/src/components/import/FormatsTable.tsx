@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-const ext = (s: string) => <code className="font-mono text-sm text-ink">{s}</code>;
+const ext = (s: string) => <code className="text-sm text-ink">{s}</code>;
 
 const ROWS: { name: string; text: ReactNode }[] = [
   { name: 'ChatGPT', text: <>A public share link, or {ext('conversations.json')} from a ChatGPT data export</> },
@@ -14,7 +14,7 @@ export function FormatsTable() {
   return (
     <section>
       <h2 className="mb-2 text-sm font-medium text-ink-2">What you can import</h2>
-      <dl className="divide-y divide-line rounded-lg border border-line bg-surface">
+      <dl className="divide-y divide-line border-y border-line">
         {ROWS.map((r) => (
           <div key={r.name} className="flex flex-col gap-0.5 px-4 py-3 sm:flex-row sm:gap-4">
             <dt className="shrink-0 font-medium text-ink sm:w-35">{r.name}</dt>

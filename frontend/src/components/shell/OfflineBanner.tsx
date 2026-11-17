@@ -22,7 +22,7 @@ export function OfflineBanner() {
         </>
       }
     >
-      The backend at <span className="font-mono text-sm">{host}</span> is not answering. ReFound is retrying every 5 seconds
+      The backend at <span className="text-sm">{host}</span> is not answering. ReFound is retrying every 5 seconds
     </Callout>
   );
 }

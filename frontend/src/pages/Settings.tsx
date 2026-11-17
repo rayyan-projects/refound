@@ -18,7 +18,7 @@ import { Stepper } from '../components/ui/Stepper';
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
     <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 border-t border-line pt-8 first:border-t-0 first:pt-0 md:pt-10">
-      <h2 id={`${id}-title`} className="mb-6 font-serif text-title font-medium text-ink">
+      <h2 id={`${id}-title`} className="mb-6 font-display text-title font-bold text-ink">
         {title}
       </h2>
       {children}
@@ -109,7 +109,7 @@ export default function SettingsPage() {
             )}
           </p>
           <h3 className="mb-2 mt-8 text-sm font-medium text-ink-2">Keyboard shortcuts</h3>
-          <dl className="flex flex-col divide-y divide-line rounded-lg border border-line bg-surface">
+          <dl className="flex flex-col divide-y divide-line border-y border-line">
             {SHORTCUTS.map((row) => (
               <div key={row.text} className="flex flex-col gap-1.5 px-4 py-2.5 sm:flex-row sm:items-center sm:gap-4">
                 <dt className="flex shrink-0 flex-wrap items-center gap-1 text-xs text-ink-3 sm:w-48">{row.keys}</dt>

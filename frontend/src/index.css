@@ -6,8 +6,8 @@
   html { background: var(--canvas); color: var(--ink); -webkit-text-size-adjust: 100%; }
   body {
     min-height: 100dvh; margin: 0;
-    font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
-    font-size: 14px; line-height: 20px;
+    font-family: 'Familjen Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px; line-height: 22px; font-variant-numeric: tabular-nums;
     -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
   }
   #root { min-height: 100dvh; }

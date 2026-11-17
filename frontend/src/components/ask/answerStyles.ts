@@ -1,5 +1,5 @@
 /** Reading style for the answer body (section 2.3): Newsreader 18/30 from md, 16/28 below. */
-export const readingText = 'font-serif text-md leading-7 text-ink md:text-read';
+export const readingText = 'font-sans text-md leading-7 text-ink md:text-read';
 
 /** The streaming caret: a 2px by 20px accent bar after the last character of the last block. */
 export const caretClasses =

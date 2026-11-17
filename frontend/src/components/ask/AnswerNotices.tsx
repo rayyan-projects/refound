@@ -6,8 +6,8 @@ export function NoKeyNotice() {
   return (
     <Callout tone="neutral" icon={Info} title="No written answer">
       The backend has no Gemini key, so ReFound can only show the closest passages. Add{' '}
-      <code className="rounded-sm bg-surface px-1 font-mono text-sm">GEMINI_API_KEY</code> to{' '}
-      <code className="rounded-sm bg-surface px-1 font-mono text-sm">backend/.env</code> and restart the backend to get written answers
+      <code className="rounded-sm bg-sunken px-1 font-mono text-sm">GEMINI_API_KEY</code> to{' '}
+      <code className="rounded-sm bg-sunken px-1 font-mono text-sm">backend/.env</code> and restart the backend to get written answers
     </Callout>
   );
 }

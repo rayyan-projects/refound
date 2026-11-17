@@ -34,7 +34,7 @@ export function Stepper({
         aria-valuemin={min}
         aria-valuemax={max}
         onKeyDown={onKeyDown}
-        className="flex h-9 w-11 items-center justify-center rounded font-mono text-md tabular-nums text-ink max-lg:h-11"
+        className="flex h-9 w-11 items-center justify-center rounded text-md tabular-nums text-ink max-lg:h-11"
       >
         {value}
       </div>

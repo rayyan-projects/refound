@@ -15,7 +15,7 @@ export function ConnectionStatus() {
       <StatusDot state={status} />
       <span className="flex min-w-0 flex-col">
         <span className="text-sm text-ink">{LABEL[status]}</span>
-        <span className="truncate font-mono text-xs tabular-nums text-ink-3" title={host}>
+        <span className="truncate text-xs tabular-nums text-ink-3" title={host}>
           {host}
         </span>
       </span>

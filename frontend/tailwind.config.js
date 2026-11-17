@@ -26,11 +26,14 @@ export default {
       'on-btn': 'var(--on-btn)',
       overlay: 'var(--overlay)',
       focus: 'var(--focus)',
+      bar: 'var(--bar)',
+      tab: { DEFAULT: 'var(--tab)', hover: 'var(--tab-hover)' },
+      flag: 'var(--flag)',
     },
     fontFamily: {
-      sans: ['"IBM Plex Sans"', 'system-ui', '-apple-system', '"Segoe UI"', 'sans-serif'],
-      serif: ['"Newsreader Variable"', 'Georgia', '"Times New Roman"', 'serif'],
-      mono: ['"IBM Plex Mono"', 'ui-monospace', 'Menlo', 'Consolas', 'monospace'],
+      sans: ['"Familjen Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      display: ['Syne', '"Familjen Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      mono: ['ui-monospace', '"SF Mono"', 'Menlo', 'Consolas', 'monospace'],
     },
     fontSize: {
       xs: ['12px', { lineHeight: '16px' }],
@@ -41,9 +44,11 @@ export default {
       read: ['18px', { lineHeight: '30px' }],
       title: ['22px', { lineHeight: '28px', letterSpacing: '-0.005em' }],
       page: ['28px', { lineHeight: '36px', letterSpacing: '-0.01em' }],
-      display: ['44px', { lineHeight: '48px', letterSpacing: '-0.02em' }],
+      display: ['44px', { lineHeight: '46px', letterSpacing: '-0.03em' }],
+      hero: ['clamp(50px, 7.4vw, 112px)', { lineHeight: '0.92', letterSpacing: '-0.035em' }],
+      section: ['clamp(34px, 4.3vw, 62px)', { lineHeight: '0.98', letterSpacing: '-0.03em' }],
     },
-    fontWeight: { normal: '400', medium: '500' },
+    fontWeight: { normal: '400', medium: '500', semibold: '600', extrabold: '800' },
     borderRadius: { none: '0', sm: '4px', DEFAULT: '8px', lg: '12px', xl: '16px', full: '9999px' },
     boxShadow: { none: 'none', 1: 'var(--shadow-1)', 2: 'var(--shadow-2)', 3: 'var(--shadow-3)' },
     extend: {
@@ -60,6 +65,7 @@ export default {
         35: '140px',
         sidebar: '248px',
         safe: 'env(safe-area-inset-bottom)',
+        bar: '88px',
       },
       maxWidth: {
         measure: '680px',
@@ -84,7 +90,7 @@ export default {
       borderRadius: { px: '1px' },
       maxHeight: { palette: '400px' },
       transitionDuration: { fast: '120ms', base: '180ms', slow: '240ms' },
-      transitionTimingFunction: { out: 'cubic-bezier(0.2, 0, 0, 1)' },
+      transitionTimingFunction: { out: 'cubic-bezier(0.2, 0, 0, 1)', spring: 'cubic-bezier(0.16, 1, 0.3, 1)' },
       keyframes: {
         'fade-in': { from: { opacity: '0' }, to: { opacity: '1' } },
         rise: { from: { opacity: '0', transform: 'translateY(4px)' }, to: { opacity: '1', transform: 'none' } },

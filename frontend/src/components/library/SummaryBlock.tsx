@@ -19,7 +19,7 @@ export function SummaryBlock({ text }: { text: string }) {
 
   return (
     <div className="mt-1">
-      <p ref={ref} className={clsx('font-serif text-md text-ink-2', !expanded && 'line-clamp-2')}>
+      <p ref={ref} className={clsx('font-sans text-md text-ink-2', !expanded && 'line-clamp-2')}>
         {text}
       </p>
       {(overflows || expanded) && (

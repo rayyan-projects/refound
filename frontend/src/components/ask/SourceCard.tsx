@@ -56,12 +56,12 @@ export function SourceCard({
       onMouseEnter={() => onHover?.(index)}
       onMouseLeave={() => onHover?.(null)}
       className={clsx(
-        'flex flex-col gap-2 rounded-lg border p-4 transition-colors duration-fast ease-out',
-        active ? 'border-accent bg-accent-soft' : 'border-line bg-surface hover:border-line-strong',
+        'relative -mx-3 flex flex-col gap-2 rounded border-t border-line px-3 py-4 transition-colors duration-fast ease-out',
+        active ? 'bg-accent-soft' : 'hover:bg-hover',
       )}
     >
       <div className="flex min-w-0 items-center gap-2">
-        <span className="flex h-5 w-5 shrink-0 items-center justify-center font-mono text-xs tabular-nums text-accent">{index}</span>
+        <span className="flex h-5 w-5 shrink-0 items-center justify-center text-xs tabular-nums text-accent">{index}</span>
         <span className="min-w-0 flex-1 truncate text-base font-medium text-ink" title={title}>
           {title}
         </span>
@@ -88,7 +88,7 @@ export function SourceCard({
       </div>
       <div className="pl-7">
         {speaker && <p className="mb-1 text-xs text-ink-3">{speaker}</p>}
-        <p ref={textRef} className={clsx('whitespace-pre-line font-serif text-md text-ink-2', !expanded && 'line-clamp-4')}>
+        <p ref={textRef} className={clsx('whitespace-pre-line font-sans text-md text-ink-2', !expanded && 'line-clamp-4')}>
           {highlight(body, terms).map((seg, i) => (seg.hit ? <mark key={i}>{seg.text}</mark> : <span key={i}>{seg.text}</span>))}
         </p>
         {(overflows || expanded) && (
@@ -122,7 +122,7 @@ export function SourceCard({
 
 export function SourceCardSkeleton() {
   return (
-    <li className="flex flex-col gap-3 rounded-lg border border-line bg-surface p-4" aria-hidden="true">
+    <li className="flex flex-col gap-3 border-t border-line py-4" aria-hidden="true">
       <Skeleton className="h-3.5 w-3/5" />
       <Skeleton className="h-3 w-1/3" />
       <div className="flex flex-col gap-2">

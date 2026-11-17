@@ -75,7 +75,7 @@ export function DocumentRow({
                   {origin}
                 </p>
               ))}
-            <p className="mt-0.5 flex flex-wrap gap-x-1.5 font-mono text-xs tabular-nums text-ink-3 md:hidden">
+            <p className="mt-0.5 flex flex-wrap gap-x-1.5 text-xs tabular-nums text-ink-3 md:hidden">
               <span className="whitespace-nowrap">{callNumber(doc)} ·</span>
               <span className="whitespace-nowrap">{plural(doc.chunk_count, 'passage', 'passages')} ·</span>
               <span className="whitespace-nowrap">{formatDate(created)}</span>
@@ -95,12 +95,12 @@ export function DocumentRow({
         </div>
       </td>
       <td className="hidden align-top md:table-cell md:py-3 md:pr-3">
-        <span title="Call number" className="font-mono text-xs tabular-nums text-ink-3">
+        <span title="Call number" className="text-xs tabular-nums text-ink-3">
           {callNumber(doc)}
         </span>
       </td>
       <td className="hidden text-right align-top md:table-cell md:py-3 md:pr-6">
-        <span className="font-mono text-xs tabular-nums text-ink-3">{formatCount(doc.chunk_count)}</span>
+        <span className="text-xs tabular-nums text-ink-3">{formatCount(doc.chunk_count)}</span>
       </td>
       <td className="hidden align-top md:table-cell md:py-3 md:pr-3">
         <span data-imported="" title={formatDateTime(created)} className="text-xs tabular-nums text-ink-2">
