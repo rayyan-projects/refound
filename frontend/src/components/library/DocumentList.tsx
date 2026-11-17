@@ -37,12 +37,14 @@ export function DocumentList({
   deletingId,
   disabled,
   empty,
+  onHover,
 }: {
   docs: Document[];
   onDelete: (doc: Document) => void;
   deletingId: number | null;
   disabled?: boolean;
   empty?: ReactNode;
+  onHover?: (id: number | null) => void;
 }) {
   return (
     <div className="border-y border-line">
@@ -51,9 +53,9 @@ export function DocumentList({
       ) : (
         <table className="block w-full md:table md:table-fixed">
           <Head />
-          <tbody className="block md:table-row-group">
+          <tbody className="block md:table-row-group" onMouseLeave={() => onHover?.(null)}>
             {docs.map((doc) => (
-              <DocumentRow key={doc.id} doc={doc} onDelete={onDelete} deleting={deletingId === doc.id} disabled={disabled} />
+              <DocumentRow key={doc.id} doc={doc} onDelete={onDelete} deleting={deletingId === doc.id} disabled={disabled} onHover={onHover} />
             ))}
           </tbody>
         </table>

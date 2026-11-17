@@ -30,11 +30,13 @@ export function DocumentRow({
   onDelete,
   deleting,
   disabled,
+  onHover,
 }: {
   doc: Document;
   onDelete: (doc: Document) => void;
   deleting: boolean;
   disabled?: boolean;
+  onHover?: (id: number | null) => void;
 }) {
   const title = displayTitle(doc);
   const origin = originLabel(doc);
@@ -44,6 +46,8 @@ export function DocumentRow({
   return (
     <tr
       data-doc-row=""
+      onMouseEnter={() => onHover?.(doc.id)}
+      onFocus={() => onHover?.(doc.id)}
       aria-busy={deleting || undefined}
       className={clsx(
         'group flex items-start gap-3 border-t border-line px-4 py-3 transition-colors duration-fast ease-out first:border-t-0 hover:bg-hover md:table-row md:p-0',

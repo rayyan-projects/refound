@@ -256,6 +256,15 @@ const SCENES = [
       expect((await row9.innerText()).includes('No chunks produced from document'), 'row 9 does not show its message');
     },
   },
+  {
+    id: 'library-gl', route: '/library', scenario: 'default', gl: true,
+    run: async (p) => {
+      await p.locator('[data-doc-row]').nth(11).waitFor();
+      await p.locator('[data-drawer="3d"] [data-drawer-ready]').waitFor({ timeout: 60000 });
+      await p.locator('[data-doc-row]').nth(3).hover();
+      await p.waitForTimeout(1500);
+    },
+  },
   { id: 'library-loading', route: '/library', scenario: 'slow', run: (p) => p.locator('[data-doc-skeleton]').first().waitFor() },
   { id: 'library-empty', route: '/library', scenario: 'empty', run: (p) => text(p, 'Nothing in your library yet') },
   {

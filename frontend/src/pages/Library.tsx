@@ -16,6 +16,8 @@ import { Button, ButtonLink } from '../components/ui/Button';
 import { Callout } from '../components/ui/Callout';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { EmptyState } from '../components/ui/EmptyState';
+import { CardDrawer } from '../components/drawer/CardDrawer';
+import { libraryDeck } from '../components/drawer/decks';
 
 function time(doc: Document): number {
   return parseServerDate(doc.created_at)?.getTime() ?? 0;
@@ -67,6 +69,17 @@ export default function LibraryPage() {
     return list;
   }, [all, q, type, sort, topic]);
 
+  // The drawer shows the filtered list, windowed to about 40 cards around the row under the pointer.
+  const [hoverDoc, setHoverDoc] = useState<number | null>(null);
+  const [windowAt, setWindowAt] = useState<number | null>(null);
+  const deck = useMemo(() => libraryDeck(visible, windowAt), [visible, windowAt]);
+  const onRowHover = (id: number | null) => {
+    setHoverDoc(id);
+    if (id !== null && !deck.indexOf.has(id)) setWindowAt(id);
+  };
+  const drawerFocus = hoverDoc !== null ? (deck.indexOf.get(hoverDoc) ?? null) : null;
+  const emptyDeck = useMemo(() => libraryDeck([]).items, []);
+
   const offline = docs.backendStatus === 'offline';
   const passages = all.reduce((sum, d) => sum + d.chunk_count, 0);
   const meta = docs.data ? `${plural(all.length, 'document', 'documents')} · ${plural(passages, 'passage', 'passages')}` : undefined;
@@ -89,6 +102,15 @@ export default function LibraryPage() {
   if (docs.data) {
     if (all.length === 0) {
       body = (
+        <>
+        <CardDrawer
+          items={emptyDeck}
+          flagged={[]}
+          focus={null}
+          label="An empty card drawer with its four dividers: chats, notes, PDFs and images"
+          className="h-56 w-full md:h-72"
+        />
+        <p className="mt-3 text-sm text-ink-3">An empty drawer. Each document you import is filed behind its divider</p>
         <EmptyState
           icon={Inbox}
           title="Nothing in your library yet"
@@ -99,6 +121,7 @@ export default function LibraryPage() {
             </ButtonLink>
           }
         />
+        </>
       );
     } else {
       const clear = () => setParams(new URLSearchParams(), { replace: true });
@@ -121,7 +144,18 @@ export default function LibraryPage() {
               {docs.error.message}
             </Callout>
           )}
+          {visible.length > 0 && (
+            <CardDrawer
+              items={deck.items}
+              flagged={[]}
+              focus={drawerFocus}
+              lowRes
+              label="Your library as a card drawer, split by divider cards for chats, notes, PDFs and images"
+              className="mb-6 h-64 w-full md:h-96"
+            />
+          )}
           <DocumentList
+            onHover={onRowHover}
             docs={visible}
             onDelete={setPending}
             deletingId={del.isPending ? (del.variables?.id ?? null) : null}
