@@ -150,6 +150,21 @@ const SCENES = [
       expect(new URL(p.url()).pathname === '/', 'the landing page redirected');
     },
   },
+  {
+    id: 'landing-gl', route: '/', scenario: 'default', gl: true,
+    run: async (p) => {
+      await p.locator('[data-hero-mode="gl"]').waitFor({ timeout: 30000 });
+      await p.locator('[data-developed="true"]').waitFor({ timeout: 30000 });
+      expect(await p.evaluate(() => getComputedStyle(document.querySelector('h1')).color === 'rgba(0, 0, 0, 0)'), 'GL mode should leave the DOM h1 transparent');
+    },
+  },
+  {
+    id: 'landing-static', route: '/', scenario: 'default',
+    run: async (p) => {
+      await p.locator('[data-hero-mode="static"][data-developed="true"]').waitFor();
+      expect(await p.evaluate(() => getComputedStyle(document.querySelector('h1')).color !== 'rgba(0, 0, 0, 0)'), 'static print h1 must be visible');
+    },
+  },
   { id: 'nav-offline', route: '/', offline: true, net: true, run: (p, v, shot) => traverse(p, shot) },
   { id: 'nav-mock', route: '/', scenario: 'default', run: (p, v, shot) => traverse(p, shot) },
   {
@@ -435,8 +450,18 @@ async function runScene(browser, scene, theme, vp) {
     },
     [theme, backend],
   );
+  if (!scene.gl) {
+    // Most scenes run without WebGL (software GL is slow and nondeterministic): this exercises the real fallbacks.
+    await ctx.addInitScript(() => {
+      const orig = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (type, ...rest) {
+        return /webgl/i.test(String(type)) ? null : orig.call(this, type, ...rest);
+      };
+    });
+  }
   if (!scene.offline) await post(`${MOCK}/__scenario`, { name: scene.scenario || 'default' });
   const page = await ctx.newPage();
+  if (scene.gl) page.setDefaultTimeout(60000);
   page.on('console', (m) => {
     if (m.type() === 'error' && !(scene.net && NET_ERROR.test(m.text()))) errors.push(`console: ${m.text()}`);
   });
@@ -452,7 +477,7 @@ async function runScene(browser, scene, theme, vp) {
   };
   const shot = async (suffix) => {
     await settle();
-    await page.screenshot({ path: path.join(SHOTS, suffix ? `${scene.id}-${suffix}--${theme}--${vp.width}.png` : `${name}.png`) });
+    await page.screenshot({ path: path.join(SHOTS, suffix ? `${scene.id}-${suffix}--${theme}--${vp.width}.png` : `${name}.png`), timeout: scene.gl ? 90000 : 30000 });
   };
   let error = null;
   try {

@@ -74,7 +74,7 @@ export default {
       minHeight: { hero: 'max(560px, min(calc(92vh - 88px), 820px))' },
       gridTemplateColumns: { step: '44px minmax(0, 1fr)', 'step-md': '72px minmax(0, 1fr) minmax(0, 1.2fr)' },
       maxWidth: {
-        hero: '11ch',
+        hero: '14ch',
         sub: '40ch',
         example: '34ch',
         data: '46ch',

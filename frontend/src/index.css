@@ -20,6 +20,10 @@
   button, input, select, textarea { font: inherit; color: inherit; }
 }
 
+/* Lenis smooth scroll (landing page only) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
 @layer components {
   /* Landing: while WebGL paints the print, the DOM text stays for layout, selection and screen readers. */
   .hero-gl .dev { color: transparent; }

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
@@ -6,6 +6,7 @@ import { COPY } from '../components/landing/landingCopy';
 import { HeroTray } from '../components/landing/HeroTray';
 import { DrawerTeaser } from '../components/landing/DrawerTeaser';
 import { Words } from '../components/landing/Words';
+import { prefersReducedMotion } from '../lib/spring';
 
 const solid =
   'inline-flex h-12 items-center rounded-full px-6 text-md font-medium transition-colors duration-base ease-out';
@@ -17,6 +18,40 @@ export default function Landing() {
   const [mode, setMode] = useState<'static' | 'gl'>('static');
   const [developed, setDeveloped] = useState(true);
   const gl = mode === 'gl';
+
+  // Lenis smooth scrolling, on the landing page only (never under reduced motion).
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    let stopped = false;
+    let raf = 0;
+    let destroy = () => undefined as void;
+    void import('lenis').then(({ default: Lenis }) => {
+      if (stopped) return;
+      const lenis = new Lenis({ lerp: 0.1 });
+      const loop = (t: number) => {
+        lenis.raf(t);
+        raf = requestAnimationFrame(loop);
+      };
+      raf = requestAnimationFrame(loop);
+      const anchors = (e: MouseEvent) => {
+        const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('main a[href^="#"]');
+        const el = a ? document.querySelector(a.getAttribute('href') ?? '') : null;
+        if (!a || !el) return;
+        e.preventDefault();
+        lenis.scrollTo(el as HTMLElement, { offset: -96 });
+      };
+      document.addEventListener('click', anchors);
+      destroy = () => {
+        document.removeEventListener('click', anchors);
+        lenis.destroy();
+      };
+    });
+    return () => {
+      stopped = true;
+      cancelAnimationFrame(raf);
+      destroy();
+    };
+  }, []);
 
   return (
     <main id="main" tabIndex={-1} className="focus:outline-none" data-landing="">
