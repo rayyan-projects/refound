@@ -30,6 +30,15 @@ export default {
       tab: { DEFAULT: 'var(--tab)', hover: 'var(--tab-hover)' },
       flag: 'var(--flag)',
       tray: 'var(--tray)',
+      drawer: {
+        room: 'var(--drawer-room)',
+        oak: 'var(--drawer-oak)',
+        paper: 'var(--drawer-paper)',
+        'paper-dim': 'var(--drawer-paper-dim)',
+        manila: 'var(--drawer-manila)',
+        ink: 'var(--drawer-ink)',
+        rule: 'var(--drawer-rule)',
+      },
       print: { DEFAULT: 'var(--print)', ink: 'var(--print-ink)', 'ink-2': 'var(--print-ink-2)' },
     },
     fontFamily: {
@@ -71,8 +80,9 @@ export default {
         safe: 'env(safe-area-inset-bottom)',
         bar: '88px',
       },
+      aspectRatio: { drawer: '16 / 11', 'drawer-md': '4 / 3.4', 'drawer-sm': '3 / 3.7' },
       minHeight: { hero: 'max(560px, min(calc(92vh - 88px), 820px))' },
-      gridTemplateColumns: { step: '44px minmax(0, 1fr)', 'step-md': '72px minmax(0, 1fr) minmax(0, 1.2fr)' },
+      gridTemplateColumns: { source: '28px minmax(0, 1fr) auto', step: '44px minmax(0, 1fr)', 'step-md': '72px minmax(0, 1fr) minmax(0, 1.2fr)' },
       maxWidth: {
         hero: '14ch',
         sub: '40ch',

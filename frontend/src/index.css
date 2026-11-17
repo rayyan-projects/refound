@@ -29,8 +29,11 @@ html.lenis, html.lenis body { height: auto; }
   .hero-gl .dev { color: transparent; }
   .print-static { background: radial-gradient(ellipse 80% 75% at 45% 45%, var(--print) 45%, var(--print-edge) 100%); }
   .reveal { transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+  .develop-word { display: inline-block; animation: develop 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
   .reveal-hidden { opacity: 0; transform: translateY(8px); }
 }
+
+@keyframes develop { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: none; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

@@ -9,7 +9,10 @@ const zlib = require('zlib');
 
 const DIST = path.join(__dirname, '..', 'dist');
 const KB = 1000;
-const BUDGET = { entry: 125 * KB, js: 180 * KB, css: 12 * KB };
+// three.js ships only in the lazy 3D drawer chunk (CardDrawer3D-*.js), with its own budget.
+// Direction 2 raised the rest-of-JS budget from 180 to 190 kB for the landing page, its tray shaders and Lenis.
+const BUDGET = { entry: 125 * KB, js: 190 * KB, css: 12 * KB, three: 150 * KB };
+const THREE_CHUNK = /^CardDrawer3D-.*\.js$/;
 const FORBIDDEN = [
   'refound-fixture-data',
   'Postgres deadlock on concurrent upserts',
@@ -50,18 +53,26 @@ const entryMatch = /<script[^>]+type="module"[^>]+src="\/?([^"]+\.js)"/.exec(htm
 if (!entryMatch) fail('no entry script found in dist/index.html');
 const entryFile = entryMatch ? path.join(DIST, entryMatch[1]) : null;
 const entry = entryFile && fs.existsSync(entryFile) ? gz(entryFile) : 0;
-const js = files.filter((f) => f.endsWith('.js')).reduce((sum, f) => sum + gz(f), 0);
+const threeFiles = files.filter((f) => THREE_CHUNK.test(path.basename(f)));
+if (threeFiles.length !== 1) fail(`expected one CardDrawer3D chunk, found ${threeFiles.length}`);
+const three = threeFiles.reduce((sum, f) => sum + gz(f), 0);
+const js = files.filter((f) => f.endsWith('.js') && !THREE_CHUNK.test(path.basename(f))).reduce((sum, f) => sum + gz(f), 0);
+// three.js must not leak into any other chunk
+for (const f of files.filter((f) => f.endsWith('.js') && !THREE_CHUNK.test(path.basename(f)))) {
+  if (fs.readFileSync(f, 'utf8').includes('WebGLRenderer')) fail(`${path.basename(f)} contains three.js (WebGLRenderer)`);
+}
 const css = files.filter((f) => f.endsWith('.css')).reduce((sum, f) => sum + gz(f), 0);
 
 const kb = (n) => `${(n / KB).toFixed(1)} kB`;
 const row = (label, value, budget) => {
   const ok = value <= budget;
-  console.log(`${label.padEnd(26)} ${kb(value).padStart(9)}  (budget ${kb(budget)})  ${ok ? 'ok' : 'OVER'}`);
+  console.log(`${label.padEnd(30)} ${kb(value).padStart(9)}  (budget ${kb(budget)})  ${ok ? 'ok' : 'OVER'}`);
   if (!ok) fail(`${label} is ${kb(value)}, over the ${kb(budget)} budget`);
 };
 console.log('Gzip sizes');
 row(`entry JS (${entryMatch ? path.basename(entryMatch[1]) : '?'})`, entry, BUDGET.entry);
-row('all JS', js, BUDGET.js);
+row('all JS except 3D drawer', js, BUDGET.js);
+row('3D drawer chunk (three.js)', three, BUDGET.three);
 row('all CSS', css, BUDGET.css);
 console.log(`Scanned ${files.length} files for fixture data and CDN hosts`);
 

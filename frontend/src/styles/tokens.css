@@ -7,6 +7,14 @@
   --print-ink: #1A0D09;
   --print-ink-2: #3B1D12;
   --print-edge: #B06A52;
+  /* The drawer under its desk lamp (the 3D scene and its still), the same in both themes. */
+  --drawer-room: #0D0A08;
+  --drawer-oak: #7A5233;
+  --drawer-paper: #F2EAD9;
+  --drawer-paper-dim: #B9AE9B;
+  --drawer-manila: #D8BD85;
+  --drawer-ink: #2A1A12;
+  --drawer-rule: rgba(190, 40, 30, 0.75);
   color-scheme: light;
   --canvas: #F1EBE1;
   --surface: #F8F4EC;
