@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Check, Copy, Inbox, RotateCw, AlertTriangle } from 'lucide-react';
@@ -24,6 +24,8 @@ import { Callout } from '../components/ui/Callout';
 import { EmptyState } from '../components/ui/EmptyState';
 import { Skeleton } from '../components/ui/Skeleton';
 import { Spinner } from '../components/ui/Spinner';
+import { CardDrawer } from '../components/drawer/CardDrawer';
+import { answerDeck, citedNumbers, libraryDeck } from '../components/drawer/decks';
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -56,6 +58,10 @@ export default function AskPage() {
   const history = useHistory();
   const [activeCite, setActiveCite] = useState<number | null>(null);
   const onCiteHover = useCallback((n: number | null) => setActiveCite(n), []);
+  // The drawer: while asking it riffles through the library; once sources arrive it holds the answer's cards.
+  const answer = useMemo(() => (run.sources ? answerDeck(run.sources, docs.data) : null), [run.sources, docs.data]);
+  const library = useMemo(() => libraryDeck(docs.data ?? []).items, [docs.data]);
+  const cited = useMemo(() => citedNumbers(run.answer), [run.answer]);
 
   const offline = backend === 'offline';
   const docCount = docs.data?.length ?? 0;
@@ -227,6 +233,27 @@ export default function AskPage() {
     sources = sourceList();
   }
 
+  const flaggedCards = answer
+    ? (kind.kind === 'answer' && cited.length ? cited.filter((n) => n <= answer.sourceIndex.length) : answer.sourceIndex.map((_, i) => i + 1)).map(
+        (n) => answer.sourceIndex[n - 1],
+      )
+    : [];
+  const drawer =
+    run.status === 'failed' || kind.kind === 'empty-index' ? null : (
+      <CardDrawer
+        items={answer ? answer.items : library}
+        flagged={flaggedCards}
+        focus={answer && activeCite ? (answer.sourceIndex[activeCite - 1] ?? null) : null}
+        riffle={asking}
+        label={
+          asking
+            ? 'The card drawer, riffling through your library for the closest passages'
+            : 'The card drawer. The passages this answer used are pulled up and flagged'
+        }
+        className="mb-6 aspect-drawer-md w-full"
+      />
+    );
+
   return (
     <div>
       <div className="flex h-5 items-center gap-2 text-sm text-ink-2">
@@ -255,8 +282,11 @@ export default function AskPage() {
           {seen}
           {main}
         </div>
-        {sources && (
-          <div className="w-full min-w-0 max-w-measure xl:sticky xl:top-6 xl:w-rail xl:shrink-0">{sources}</div>
+        {(sources || drawer) && (
+          <div className="w-full min-w-0 max-w-measure xl:sticky xl:top-24 xl:w-rail xl:shrink-0">
+            {drawer}
+            {sources}
+          </div>
         )}
       </div>
     </div>

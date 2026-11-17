@@ -221,6 +221,16 @@ const SCENES = [
       expect(outline === 'solid', `no focus ring on the citation (outline ${outline})`);
     },
   },
+  {
+    id: 'ask-done-gl', route: '/ask', scenario: 'default', gl: true,
+    run: async (p) => {
+      await submit(p);
+      await p.locator('#source-5').waitFor();
+      await p.locator('[data-drawer="3d"] [data-drawer-ready]').waitFor({ timeout: 60000 });
+      await p.locator('#source-1').hover();
+      await p.waitForTimeout(1500);
+    },
+  },
   { id: 'ask-weak', route: '/ask', scenario: 'weak', run: async (p) => { await submit(p, 'What did the lease say about the notice period?'); await text(p, 'Nothing in your library matches this closely'); } },
   { id: 'ask-no-key', route: '/ask', scenario: 'nokey', run: async (p) => { await submit(p); await text(p, 'No written answer'); await p.locator('#source-5').waitFor(); } },
   { id: 'ask-llm-error', route: '/ask', scenario: 'llm-error', run: async (p) => { await submit(p); await text(p, 'The answer could not be written'); await p.locator('#source-5').waitFor(); } },

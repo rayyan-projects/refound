@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react';
 import clsx from 'clsx';
 
-const base = 'inline-block rounded-sm px-1 align-baseline text-xs tabular-nums leading-5 text-accent';
+const base = 'ml-0.5 inline-block rounded-sm px-0.5 align-super text-xs font-semibold leading-none tabular-nums text-accent';
 
 export function CitationMark({
   n,
