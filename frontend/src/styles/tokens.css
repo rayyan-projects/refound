@@ -1,6 +1,12 @@
 /* Direction 2 palette: a darkroom (dark) and its paper-and-ink print (light). Contrast pairs are AA; see
    docs/FRONTEND_REDESIGN_PLAN.md, "Direction 2 addendum". */
 :root {
+  /* The landing tray and its developed print (theme-independent; the landing is always the darkroom). */
+  --tray: #0A0706;
+  --print: #DB8C70;
+  --print-ink: #1A0D09;
+  --print-ink-2: #3B1D12;
+  --print-edge: #B06A52;
   color-scheme: light;
   --canvas: #F1EBE1;
   --surface: #F8F4EC;
@@ -67,9 +73,9 @@
   --on-btn: #1A0D09;
   --overlay: rgba(0, 0, 0, 0.6);
   --focus: #E39A3D;
-  --bar: #060504;
-  --tab: #1A1511;
-  --tab-hover: #241D17;
+  --bar: #040303;
+  --tab: #0B0908;
+  --tab-hover: #15110E;
   --flag: #E39A3D;
   --shadow-1: none;
   --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.45);

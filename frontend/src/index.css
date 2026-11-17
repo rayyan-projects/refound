@@ -20,6 +20,14 @@
   button, input, select, textarea { font: inherit; color: inherit; }
 }
 
+@layer components {
+  /* Landing: while WebGL paints the print, the DOM text stays for layout, selection and screen readers. */
+  .hero-gl .dev { color: transparent; }
+  .print-static { background: radial-gradient(ellipse 80% 75% at 45% 45%, var(--print) 45%, var(--print-edge) 100%); }
+  .reveal { transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+  .reveal-hidden { opacity: 0; transform: translateY(8px); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

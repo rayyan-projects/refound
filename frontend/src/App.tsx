@@ -3,8 +3,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './state/queryClient';
 import { AppShell } from './components/shell/AppShell';
+import { RootLayout } from './components/shell/RootLayout';
 
-const Welcome = lazy(() => import('./pages/Welcome'));
+const Landing = lazy(() => import('./pages/Landing'));
 const Ask = lazy(() => import('./pages/Ask'));
 const Library = lazy(() => import('./pages/Library'));
 const Import = lazy(() => import('./pages/Import'));
@@ -18,8 +19,9 @@ export default function App() {
       <BrowserRouter>
         <Suspense fallback={null}>
           <Routes>
-            <Route path="/" element={<Welcome />} />
-            <Route element={<AppShell />}>
+            <Route element={<RootLayout />}>
+              <Route path="/" element={<Landing />} />
+              <Route element={<AppShell />}>
               <Route path="/ask" element={<Ask />} />
               <Route path="/library" element={<Library />} />
               <Route path="/import" element={<Import />} />
@@ -31,6 +33,7 @@ export default function App() {
               <Route path="/app/history" element={<Navigate to="/history" replace />} />
               <Route path="/app/settings" element={<Navigate to="/settings" replace />} />
               <Route path="*" element={<NotFound />} />
+              </Route>
             </Route>
           </Routes>
         </Suspense>

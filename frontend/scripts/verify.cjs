@@ -108,6 +108,31 @@ async function setFiles(page, names) {
   }));
   await page.locator('input[type=file][accept]').setInputFiles(files);
 }
+// Click-only tour: from / through every page by the guide bar, and back to / by the wordmark.
+async function traverse(page, shot) {
+  await page.getByRole('heading', { name: 'You already figured this out' }).waitFor();
+  const bar = page.locator('header').first();
+  const steps = [
+    { name: /^Ask/, path: '/ask' },
+    { name: /^Library/, path: '/library' },
+    { name: /^Import/, path: '/import' },
+    { name: /^History/, path: '/history' },
+  ];
+  for (const s of steps) {
+    await bar.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: s.name }).click();
+    await page.waitForURL(`**${s.path}`);
+    await page.locator('main h1').first().waitFor();
+    await bar.getByRole('navigation', { name: 'Main' }).locator('a[aria-current="page"]', { hasText: s.name }).waitFor({ timeout: 5000 });
+    if (s.path === '/library') await shot('library');
+  }
+  await bar.getByRole('link', { name: 'Settings' }).locator('visible=true').first().click();
+  await page.waitForURL('**/settings');
+  await page.getByRole('heading', { name: 'Settings' }).waitFor();
+  await bar.getByRole('link', { name: 'ReFound', exact: true }).click();
+  await page.waitForURL((u) => new URL(u).pathname === '/');
+  await page.getByRole('heading', { name: 'You already figured this out' }).waitFor();
+}
+
 function expect(cond, message) {
   if (!cond) throw new Error(message);
 }
@@ -115,15 +140,18 @@ function expect(cond, message) {
 // ---------------------------------------------------------------- scenes
 
 const SCENES = [
-  { id: 'welcome', route: '/', offline: true, net: true, run: (p) => p.getByRole('heading', { name: 'Find what you already worked out' }).waitFor() },
+  { id: 'landing', route: '/', offline: true, net: true, run: (p) => p.getByRole('heading', { name: 'You already figured this out' }).waitFor() },
   {
-    id: 'welcome-failed', route: '/', offline: true, net: true,
+    id: 'landing-online', route: '/', scenario: 'default',
     run: async (p) => {
-      await p.getByRole('heading', { name: 'Find what you already worked out' }).waitFor();
-      await p.getByRole('button', { name: 'Connect' }).click();
-      await text(p, 'Nothing answered at');
+      await p.getByRole('heading', { name: 'You already figured this out' }).waitFor();
+      await p.getByText('Connected', { exact: true }).locator('visible=true').first().waitFor();
+      await p.waitForTimeout(500);
+      expect(new URL(p.url()).pathname === '/', 'the landing page redirected');
     },
   },
+  { id: 'nav-offline', route: '/', offline: true, net: true, run: (p, v, shot) => traverse(p, shot) },
+  { id: 'nav-mock', route: '/', scenario: 'default', run: (p, v, shot) => traverse(p, shot) },
   {
     id: 'ask-idle', route: '/ask', scenario: 'default',
     run: async (p) => {
