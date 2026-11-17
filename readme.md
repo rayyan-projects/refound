@@ -104,8 +104,8 @@ refound/
 │   └── requirements.txt
 ├── frontend/
 │   ├── src/
-│   │   ├── pages/        # Welcome, Ask, Library, Import, History, Settings, NotFound
-│   │   ├── components/   # ui/ primitives, shell/ (sidebar, palette), ask/, library/, import/, history/, settings/, welcome/
+│   │   ├── pages/        # Landing (/), Ask, Library, Import, History, Settings, NotFound
+│   │   ├── components/   # ui/ primitives, shell/ (guide-tab bar, palette), landing/, drawer/ (three.js), ask/, library/, import/, history/, settings/
 │   │   ├── state/        # Stores: settings, current question, import queue, toasts; React Query client
 │   │   ├── hooks/        # useStore, useBackendStatus, useDocuments, useHistory, useHotkeys, ...
 │   │   ├── lib/          # Pure helpers (dates, titles, call numbers, relevance, share links, answer parsing)

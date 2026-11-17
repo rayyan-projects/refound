@@ -562,6 +562,11 @@ async function extras(browser) {
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.querySelector('dialog[open]'));
     expect(await page.evaluate(() => document.activeElement?.hasAttribute('data-palette-trigger')), 'focus did not return to the palette trigger');
+    // Guide tabs: arrow keys move between them, with a visible focus ring.
+    await page.locator('header nav[aria-label="Main"] a', { hasText: /^Ask/ }).focus();
+    await page.keyboard.press('ArrowRight');
+    const tab = await page.evaluate(() => ({ text: document.activeElement?.textContent ?? '', outline: getComputedStyle(document.activeElement).outlineStyle }));
+    expect(tab.text.startsWith('Library') && tab.outline === 'solid', `ArrowRight did not move to a ringed Library tab (${JSON.stringify(tab)})`);
     await page.goto(`${APP}/library`);
     await page.locator('[data-doc-row]').first().waitFor();
     for (let i = 0; i < 40; i++) {

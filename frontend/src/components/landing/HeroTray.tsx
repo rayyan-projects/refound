@@ -256,6 +256,7 @@ export function HeroTray({ heroRef, onMode, onDeveloped }: HeroTrayProps) {
       alive = false;
       if (raf) cancelAnimationFrame(raf);
       raf = 0;
+      cv.remove();
       onMode('static');
       onDeveloped(true);
     };

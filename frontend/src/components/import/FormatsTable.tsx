@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-const ext = (s: string) => <code className="text-sm text-ink">{s}</code>;
+const ext = (s: string) => <code className="font-sans text-sm text-ink">{s}</code>;
 
 const ROWS: { name: string; text: ReactNode }[] = [
   { name: 'ChatGPT', text: <>A public share link, or {ext('conversations.json')} from a ChatGPT data export</> },

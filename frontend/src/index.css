@@ -27,6 +27,8 @@ html.lenis, html.lenis body { height: auto; }
 @layer components {
   /* Landing: while WebGL paints the print, the DOM text stays for layout, selection and screen readers. */
   .hero-gl .dev { color: transparent; }
+  /* The amber ring vanishes on the print paper: focus on the print uses its ink. */
+  .print-static, .hero-gl { --focus: var(--print-ink); }
   .print-static { background: radial-gradient(ellipse 80% 75% at 45% 45%, var(--print) 45%, var(--print-edge) 100%); }
   .reveal { transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
   .develop-word { display: inline-block; animation: develop 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }

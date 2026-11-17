@@ -1869,6 +1869,7 @@ into the app on this branch and **replaces** these parts of the plan above. Ever
 | 4.10 Welcome page | Landing page: WebGL2 Latent Image tray (`components/landing/HeroTray.tsx`, real DOM h1 kept, transparent while GL paints), static developed print without WebGL, on context loss or under reduced motion; drawer teaser (labelled "Example"), How it works, Where your data goes. Lenis smooth scroll on this page only |
 | 8 Dependencies ("no 3D, no animation library") | `three@0.170.0` (+ `@types/three`) in one lazy chunk (`CardDrawer3D-*.js`) and `lenis@1.1.13` (landing only). No CDNs |
 | 5.4 check-dist budgets | Entry stays 125 kB gzip. The 3D drawer chunk has its own budget (150 kB). Other JS 190 kB (was 180) for the landing page and Lenis |
+| 10 "no blur, no gradients" greps | The developing answer words blur in (`develop` keyframes) and the static print uses a radial gradient (`.print-static`); both are part of the approved prototype |
 | No hex values in `src` | One named exception: `src/components/drawer/drawerPalette.ts` (canvas 2D and three.js take literal colours) |
 
 The drawer (`components/drawer/`): Ask riffles it while retrieving, then builds it from the returned sources and flags

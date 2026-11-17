@@ -105,7 +105,7 @@ export default function HistoryPage() {
             <HistoryList items={items} filter={filter} onFilter={setFilter} selectedId={selectedId} />
           </div>
           {detail && (
-            <div className={routeId !== null ? 'min-w-0 max-w-measure flex-1 lg:sticky lg:top-6' : 'hidden min-w-0 max-w-measure flex-1 lg:sticky lg:top-6 lg:block'}>
+            <div className={routeId !== null ? 'min-w-0 max-w-measure flex-1 lg:sticky lg:top-24' : 'hidden min-w-0 max-w-measure flex-1 lg:sticky lg:top-24 lg:block'}>
               {routeId !== null && back}
               {detail}
             </div>

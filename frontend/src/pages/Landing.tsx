@@ -73,11 +73,11 @@ export default function Landing() {
         />
         <div className="relative z-10 mx-auto grid w-full max-w-content grid-cols-1 items-center gap-12 px-4 pb-24 pt-12 md:px-6 lg:grid-cols-12 lg:gap-16 lg:px-10 lg:pb-24 lg:pt-16">
           <div className="lg:col-span-7">
-            <nav aria-label="On this page" className="mb-10 flex gap-6 text-sm text-print-ink-2">
-              <a href="#how" className="underline-offset-4 hover:text-print-ink hover:underline">
+            <nav aria-label="On this page" className="mb-8 flex gap-6 text-sm text-print-ink-2">
+              <a href="#how" className="inline-flex h-11 items-center underline-offset-4 hover:text-print-ink hover:underline">
                 {COPY.navHow}
               </a>
-              <a href="#data" className="underline-offset-4 hover:text-print-ink hover:underline">
+              <a href="#data" className="inline-flex h-11 items-center underline-offset-4 hover:text-print-ink hover:underline">
                 {COPY.navData}
               </a>
             </nav>
@@ -109,7 +109,7 @@ export default function Landing() {
             </p>
           </figure>
         </div>
-        <p className="absolute inset-x-0 bottom-5 z-10 mx-auto max-w-content px-4 text-sm text-print-ink-2 md:px-6 lg:px-10">{COPY.hint}</p>
+        <p className="absolute inset-x-0 bottom-5 z-10 mx-auto max-w-content px-4 text-sm text-print-ink md:px-6 lg:px-10">{COPY.hint}</p>
       </section>
 
       <DrawerTeaser />

@@ -128,7 +128,7 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
 - Naive UTC timestamps from the backend are parsed as UTC (`parseServerDate` appends `Z`).
 - localStorage keys: `refound_backend_url` (default `http://localhost:8000`), `refound_theme` (`system|light|dark`,
   read by the inline script in `index.html` before first paint), `refound_top_k` (1..10, default 5, sent as `top_k`).
-- Routes: `/` Welcome (redirects to `/ask` when the backend answers), `/ask`, `/library`, `/import`, `/history[/:id]`,
+- Routes: `/` landing page (always; direction 2 removed the Welcome connect gate), `/ask`, `/library`, `/import`, `/history[/:id]`,
   `/settings`; old `/app/*` paths redirect. No `public/404.html` (Cloudflare Pages SPA fallback needs it absent).
 - `frontend/nginx.conf` is a copy of `nginx/nginx.conf` so the frontend Docker build context has it. Keep them identical.
 

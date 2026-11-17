@@ -62,8 +62,11 @@ export function GuideBar() {
       placed.current = true;
     };
     measure(true);
+    // Tabs change width when the web font swaps in or a count appears: follow them.
     const ro = new ResizeObserver(() => measure(false));
     ro.observe(row);
+    tabRefs.current.forEach((t) => t && ro.observe(t));
+    document.fonts?.ready.then(() => measure(false));
     return () => ro.disconnect();
   }, [active, counts.library, counts.import]);
 
@@ -122,7 +125,7 @@ export function GuideBar() {
                   )}
                 >
                   <span className="truncate">{item.label}</span>
-                  {c !== null && <span className={clsx('text-xs tabular-nums', current ? 'text-ink-2' : 'text-ink-3')}>{formatCount(c)}</span>}
+                  {c !== null && <span className={clsx('text-xs tabular-nums', 'text-ink-2')}>{formatCount(c)}</span>}
                 </NavLink>
               );
             })}
@@ -157,7 +160,7 @@ function BarTools({
         title="Search or jump to"
         className="flex h-11 items-center rounded px-1.5 text-ink-2 transition-colors duration-fast ease-out hover:text-ink lg:h-9"
       >
-        <kbd className="inline-flex h-6 items-center rounded-sm border border-b-2 border-line-strong bg-canvas px-2 text-xs font-medium tabular-nums text-ink">
+        <kbd className="inline-flex h-6 font-sans items-center rounded-sm border border-b-2 border-line-strong bg-canvas px-2 text-xs font-medium tabular-nums text-ink">
           {paletteKeys()}
         </kbd>
       </button>

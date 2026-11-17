@@ -17,7 +17,7 @@ import { Stepper } from '../components/ui/Stepper';
 
 function Section({ id, title, children }: { id: string; title: string; children: ReactNode }) {
   return (
-    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-20 border-t border-line pt-8 first:border-t-0 first:pt-0 md:pt-10">
+    <section id={id} aria-labelledby={`${id}-title`} className="scroll-mt-28 border-t border-line pt-8 first:border-t-0 first:pt-0 md:pt-10">
       <h2 id={`${id}-title`} className="mb-6 font-display text-title font-bold text-ink">
         {title}
       </h2>
