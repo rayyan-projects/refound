@@ -19,7 +19,9 @@ Run everything from this directory.
 
 `npm run verify` needs Playwright and Chromium installed globally (it uses `require('playwright')`; Playwright is not a
 dependency of this package). `SHOTS_DIR` changes where screenshots go and `SCENES=ask-idle,library` runs only some
-scenes. The plan behind the design, with every page state, is `docs/FRONTEND_REDESIGN_PLAN.md`.
+scenes. The plan behind the design, with every page state, is `docs/FRONTEND_REDESIGN_PLAN.md`; its "Direction 2 addendum" covers
+the landing page, the guide-tab bar and the three.js drawer. Most verify scenes run with WebGL stubbed off; the `*-gl`
+scenes use software GL and need long timeouts.
 
 To work on the UI without the Python backend: run `npm run mock`, start `npm run dev`, open the app and
 connect to `http://127.0.0.1:8787`.

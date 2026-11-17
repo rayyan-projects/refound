@@ -540,6 +540,12 @@ async function extras(browser) {
       },
       [backend, init],
     );
+    await ctx.addInitScript(() => {
+      const orig = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function (type, ...rest) {
+        return /webgl/i.test(String(type)) ? null : orig.call(this, type, ...rest);
+      };
+    });
     return { ctx, page: await ctx.newPage() };
   };
 

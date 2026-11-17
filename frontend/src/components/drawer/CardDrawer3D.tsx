@@ -170,7 +170,7 @@ export default function CardDrawer3D({ items, flagged, focus, riffle = false, re
         const amp = 2 + rnd() * 10;
         const f = 0.002 + rnd() * 0.006;
         const ph = rnd() * 9;
-        x.strokeStyle = `rgba(${dark},${a})`;
+        x.strokeStyle = DRAWER.grain(dark, a);
         x.lineWidth = 0.6 + rnd() * 2.4;
         x.beginPath();
         for (let X = 0; X <= w; X += 8) {
@@ -181,8 +181,8 @@ export default function CardDrawer3D({ items, flagged, focus, riffle = false, re
         x.stroke();
       }
       const g = x.createLinearGradient(0, 0, 0, h);
-      g.addColorStop(0, 'rgba(0,0,0,.06)');
-      g.addColorStop(1, 'rgba(0,0,0,.18)');
+      g.addColorStop(0, DRAWER.shadeTop);
+      g.addColorStop(1, DRAWER.shadeBottom);
       x.fillStyle = g;
       x.fillRect(0, 0, w, h);
     };
@@ -353,8 +353,8 @@ export default function CardDrawer3D({ items, flagged, focus, riffle = false, re
         x.fillStyle = tab ? DRAWER.dividerPaper : DRAWER.cardPaper;
         x.fillRect(0, 0, w, ht);
         const g = x.createRadialGradient(w / 2, ht * 0.55, ht * 0.2, w / 2, ht * 0.55, w * 0.7);
-        g.addColorStop(0, 'rgba(255,255,255,0)');
-        g.addColorStop(1, tab ? 'rgba(120,80,20,.18)' : 'rgba(150,110,50,.16)');
+        g.addColorStop(0, DRAWER.clear);
+        g.addColorStop(1, tab ? DRAWER.dividerEdge : DRAWER.cardEdge);
         x.fillStyle = g;
         x.fillRect(0, 0, w, ht);
         x.globalAlpha = 0.05;

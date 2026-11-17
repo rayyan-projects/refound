@@ -1850,3 +1850,29 @@ Honesty
 Docs
 - [ ] `TASKS.md`, `KEY_INFO.md`, `EXPLAINER.md`, `readme.md` and `frontend/README.md` are updated as in
       Phase 9.
+
+---
+
+## Direction 2 addendum (17 Nov 2026)
+
+The user approved "direction 2" (spec: `docs/direction-2/prototype.html` and `docs/direction-2/copy.md`). It is built
+into the app on this branch and **replaces** these parts of the plan above. Everything not named here still applies.
+
+| Replaced | Now |
+|---|---|
+| 1 Design direction (wordmark, call-number look) and 2.3 Typography | Syne (700/800) for display and titles, Familjen Grotesk (400/500/600) for everything else, both self-hosted via `@fontsource` 5.3.0. Newsreader and IBM Plex are removed. Mono (system stack) is for code inside answers only; numbers are tabular sans |
+| 2.1 Colour tokens | Retinted to the darkroom: dark = room `#0E0B0A`, paper `#EFE7DA`, amber `#E39A3D`; light = a paper-and-ink print. All text pairs AA. Extra tokens: `bar`, `tab`, `flag`, `tray`, `print*`, `drawer-*`. Dark tokens also apply to any `[data-theme='dark']` subtree (the landing page is always dark) |
+| 2.6 Elevation, cards and boxes | Fewer boxes: answer, sources, lists, callouts and settings use type, whitespace and hairlines. The only objects are the landing print and the 3D cards |
+| 2.8 Motion | Springs are allowed: the guide-tab plate (JS spring, `src/lib/spring.ts`), tab hover lift (2px, overshoot curve), the tray and drawer. All snap under reduced motion |
+| 3.1 `/` and Welcome | `/` always renders the landing page (no redirect, no connect gate). Connecting lives only in Settings → Connection; the offline banner links there |
+| 3.2 Shell (sidebar, mobile top bar and tab bar) | One top bar on every route and width: index-card guide tabs (Ask, Library, Import, History) with counts, wordmark home link, `Ctrl K` keycap, connection dot and text, Settings. The current tab stands proud and joins the page; one shared plate springs between tabs; arrow keys move between tabs |
+| 4.10 Welcome page | Landing page: WebGL2 Latent Image tray (`components/landing/HeroTray.tsx`, real DOM h1 kept, transparent while GL paints), static developed print without WebGL, on context loss or under reduced motion; drawer teaser (labelled "Example"), How it works, Where your data goes. Lenis smooth scroll on this page only |
+| 8 Dependencies ("no 3D, no animation library") | `three@0.170.0` (+ `@types/three`) in one lazy chunk (`CardDrawer3D-*.js`) and `lenis@1.1.13` (landing only). No CDNs |
+| 5.4 check-dist budgets | Entry stays 125 kB gzip. The 3D drawer chunk has its own budget (150 kB). Other JS 190 kB (was 180) for the landing page and Lenis |
+| No hex values in `src` | One named exception: `src/components/drawer/drawerPalette.ts` (canvas 2D and three.js take literal colours) |
+
+The drawer (`components/drawer/`): Ask riffles it while retrieving, then builds it from the returned sources and flags
+the cited ones; Library builds it from real documents split by divider cards, windowed to 40 cards; the DOM lists stay
+the accessible layer. Without WebGL2 or with reduced motion a designed still (`StaticDrawer`) is shown, never a blank.
+`verify.cjs` stubs WebGL off for most scenes and runs a few GL scenes (`landing-gl`, `ask-done-gl`, `library-gl`) with
+long timeouts; the `nav-offline` and `nav-mock` scenes walk every route by clicks from `/` and back.

@@ -28,4 +28,10 @@ export const DRAWER = {
   body: '#3d3026',
   source: '#7a6a5a',
   failed: '#a33a26',
+  shadeTop: 'rgba(0,0,0,.06)',
+  shadeBottom: 'rgba(0,0,0,.18)',
+  clear: 'rgba(255,255,255,0)',
+  dividerEdge: 'rgba(120,80,20,.18)',
+  cardEdge: 'rgba(150,110,50,.16)',
+  grain: (rgb: string, a: number) => `rgba(${rgb},${a})`,
 };

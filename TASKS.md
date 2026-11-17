@@ -99,6 +99,9 @@ Most were reported as not working, or not correctly.
 - ⬜ README says `cp ../.env.example`, but the file is `backend/.env.example`; `backend/test.txt` is a stray file.
 
 ## ✅ Done (recent)
+- ✅ Frontend direction 2: guide-tab top bar on every route (navigation no longer needs typed URLs), `/` is a landing
+  page with the Latent Image tray, a three.js card-catalogue drawer on Ask and Library, Syne + Familjen Grotesk,
+  darkroom palette. Connecting to the backend moved to Settings. Spec: `docs/direction-2/`, addendum in the plan.
 - ✅ Frontend redesign (Card Index): new shell, Library page, import queue with multi-file and folder import, honest
   handling of features that are not built. Plan: `docs/FRONTEND_REDESIGN_PLAN.md`.
 - ✅ Dockerfile nginx.conf fixed (`frontend/nginx.conf` added; it was missing from the build context).

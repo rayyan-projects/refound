@@ -132,6 +132,20 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
   `/settings`; old `/app/*` paths redirect. No `public/404.html` (Cloudflare Pages SPA fallback needs it absent).
 - `frontend/nginx.conf` is a copy of `nginx/nginx.conf` so the frontend Docker build context has it. Keep them identical.
 
+### Direction 2 (Nov 2026; overrides parts of the above, see the addendum in the plan)
+- Type: Syne (display) + Familjen Grotesk (text), self-hosted. Palette: darkroom tokens; `[data-theme='dark']` also
+  works on a subtree (the landing page is always dark).
+- Navigation: `components/shell/GuideBar.tsx` (index-card guide tabs) in `RootLayout` on every route, including `/`.
+  `/` always renders `pages/Landing.tsx`; there is no connect gate. Connect from Settings → Connection.
+- WebGL: `HeroTray` (WebGL2 shaders in `trayShaders.ts`) and `components/drawer/CardDrawer3D.tsx` (three.js r170,
+  lazy chunk, disposes everything on unmount, renders only while moving). Both probe WebGL2 themselves and fall back
+  to static versions (`print-static`, `StaticDrawer`) without WebGL, on context loss or under reduced motion.
+- Drawer decks: `components/drawer/decks.ts` (`answerDeck` flags the `[Memory N]`-cited sources; `libraryDeck`
+  groups by type with divider cards, max 40 cards). Colour literals for canvas/three live only in `drawerPalette.ts`.
+- Budgets (`npm run check`): entry 125 kB, 3D chunk 150 kB, other JS 190 kB, CSS 12 kB (gzip).
+- Software GL in headless Chromium blocks the main thread long enough for the 3s health check to time out, so GL
+  scenes may show "Offline"; `verify.cjs` runs most scenes with WebGL stubbed off.
+
 ## 8. Tasks and status
 Moved to `TASKS.md` (the to-do board: done / in progress / blocked / not started). Keep this file for
 decisions and repo knowledge only.
