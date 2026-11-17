@@ -1,0 +1,51 @@
+{
+  "_fixture": "refound-fixture-data",
+  "data": {
+    "tokens": [
+      "You fixed it by making every transaction take its row locks in the same order. ",
+      "The deadlock came from two workers upserting the same rows in different orders [Memory 1]. ",
+      "You sorted each batch by primary key before the `INSERT ... ON CONFLICT`, ",
+      "cut the batch size from 5000 to 500, ",
+      "and added a retry on SQLSTATE `40P01` with jitter, three attempts at most [Memory 2].",
+      "\n\n",
+      "Your notes on the book chapter explain why the retry is still needed: ",
+      "the database breaks a lock cycle by aborting one transaction, ",
+      "and the application has to run it again [Memory 3]."
+    ],
+    "final": {
+      "sources": [
+        {
+          "source": "Postgres deadlock on concurrent upserts",
+          "filename": "https://chatgpt.com/share/6741f3c2-8a14-8005-b6d1-0c9e4f7a21bb",
+          "score": 6.2143,
+          "excerpt": "[ASSISTANT]\nThe deadlock comes from two transactions upserting the same set of rows in a different order\\. Each takes a row lock the other needs. Sort the batch by primary key before the INSERT ... ON CONFLICT so every transaction acquires its locks in the same order."
+        },
+        {
+          "source": "Postgres deadlock on concurrent upserts",
+          "filename": "https://chatgpt.com/share/6741f3c2-8a14-8005-b6d1-0c9e4f7a21bb",
+          "score": 4.0412,
+          "excerpt": "[USER]\nSorting fixed it in staging. I also dropped the batch size from 5000 to 500 and added a retry on SQLSTATE 40P01 with jitter, three attempts max. My pick\\: keep the retry even if the sort holds up."
+        },
+        {
+          "source": "designing-data-intensive-applications-ch7",
+          "filename": "designing-data-intensive-applications-ch7.pdf",
+          "score": 1.3077,
+          "excerpt": "Deadlocks arise when transactions wait on each other in a cycle. The database detects the cycle and aborts one of them so that the others can make progress; the aborted transaction must be retried by the application."
+        },
+        {
+          "source": "conversations.json",
+          "filename": "conversations.json",
+          "score": -0.4127,
+          "excerpt": "[CLAUDE]\nFor the migration, take an advisory lock first so only one worker runs it. pg_advisory_xact_lock releases at commit, which is what you want here."
+        },
+        {
+          "source": "Docker build cache notes",
+          "filename": "docker-notes.md",
+          "score": -5.6402,
+          "excerpt": "Order the Dockerfile so dependency installation comes before copying the source. The lockfile changes rarely, so that layer stays cached."
+        }
+      ],
+      "duration_ms": 2412.37
+    }
+  }
+}

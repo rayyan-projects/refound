@@ -58,12 +58,8 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
   `resolve_share_url` rejects `claude.ai/share/<uuid>` with "Claude share links aren't supported yet" (HTTP 422);
   the parser is commented out in `app/parsers/claude_share_parser.py` (re-enable steps in its docstring).
   Claude JSON *export* uploads are unaffected and still supported.
-  **TODO until re-enabled — remove user-facing mentions of Claude share links:**
-  - `frontend/src/pages/app/Import.tsx`: `isValidShareUrl` accepts `claude.ai` (L17); toast "ChatGPT or Claude
-    share link" (L69); hint "Paste a ChatGPT or Claude shared conversation link" (L137).
-  - `EXPLAINER.md` "How importing a share link works" (Claude link bullet) and the Features table row.
-  - Keep "(ChatGPT/Claude export)" wording for file uploads (`ImportDropZone.tsx`, `Import.tsx` L109): exports work.
-  - Landing page and readme.md have no Claude-link mentions (checked).
+  The frontend rejects `claude.ai` links client-side with its own message (`frontend/src/lib/shareLink.ts`, which
+  mirrors this allowlist); "Claude export" wording stays because exports work.
 - (Historical) Claude share: page HTML is an empty shell. We fetched `https://claude.ai/api/chat_snapshots/<uuid>` JSON directly.
   Cloudflare may 403 from cloud/VPN IPs → surfaces as ShareAccessError (HTTP 403 to the client). Not fixable server-side.
   Live attempts: cloud session got the bot challenge; the user's home test also failed → feature disabled (above).
@@ -105,18 +101,55 @@ tests/                  pytest; fixtures/ holds synthetic share pages (see §5)
 - `Chunk.faiss_id` goes stale after any delete (index is rebuilt and rows shift). Search uses the in-memory `_ids`
   map, so results are correct; just don't trust `faiss_id`.
 - Default `gemini_model = "gemini-1.5-flash"` is likely retired → synthesis may fail until updated (unverified).
-- Frontend `api.ts` shows raw error body (`{"detail": ...}` JSON) in toasts (seen live on the Import page).
-- Search source cards show rerank scores as percentages (`404%`, `-564%`): cross-encoder logits aren't 0–1.
-- Library rows and search sources show the share URL, not the conversation title: `Document.filename` is the URL
-  for URL imports and the UI renders `filename`. `Document.title` holds the real title.
-- ChatGPT octane `content` is markdown with escapes, so chunks keep backslashes (`My pick\:`, `4\.`).
+- ChatGPT octane `content` is markdown with escapes, so chunks keep backslashes (`My pick\:`, `4\.`). The frontend
+  strips them for display (`cleanText`); the stored text still has them.
 - README says `cp ../.env.example`; the file is `backend/.env.example`. `backend/test.txt` is a stray UTF-16 file.
 - No Alembic migrations despite alembic in requirements; schema changes need create_all on a fresh DB or a migration.
 
-## 7. Tasks and status
+## 7. Frontend (Card Index redesign, Nov 2026)
+- Plan and spec: `docs/FRONTEND_REDESIGN_PLAN.md`. Design tokens: `frontend/src/styles/tokens.css` (CSS variables, light +
+  `[data-theme='dark']`), exposed to Tailwind 3 in `frontend/tailwind.config.js`. No hex/rgb or arbitrary px values in `src`.
+  Fonts are self-hosted (`@fontsource`, imported in `main.tsx`); nothing loads from a CDN. Icons: `lucide-react` via `components/ui/Icon.tsx`.
+- State: tiny external stores (`src/lib/store.ts` + `hooks/useStore.ts`, `useSyncExternalStore`) for settings, the current
+  question (`state/ask.ts`, survives navigation), the import queue and toasts. Server data goes through React Query
+  (`state/queryClient.ts`); one shared health query (`hooks/useBackendStatus.ts`, 30s poll online, 5s offline). No
+  context providers, no `setState` in effects (keeps `react-hooks` lint clean).
+- Unbuilt features are **hidden until the API returns them**: provisional shapes and guards in `src/types/provisional.ts`
+  (`similar_problems`, `Document.topics`, `Document.summary`). The surfaces render only when real data is present; they
+  are named once, in Settings → Planned (`src/lib/planned.ts`). Replace the guesses when the backend contract exists.
+- Mock backend: `frontend/scripts/mock-backend.cjs` serves `frontend/fixtures/*.json` (scenarios via `--scenario` or
+  `POST /__scenario`). `npm run verify` drives every page/state with Playwright (global install, not a dependency) and
+  screenshots to `.shots/`; `npm run check` enforces bundle budgets and scans `dist/`. **Fixtures never enter `src`.**
+- The UI detects backend answer sentinels by prefix (`src/lib/answer.ts` `classifyAnswer`); changing these strings in
+  `query.py` changes the UI: `No relevant memories found` (empty index), `[GEMINI_API_KEY not set]` (no key),
+  `Error generating answer:` (Gemini failure). Answers cite `[Memory N]`, turned into links to source cards.
+- Source relevance (`src/lib/relevance.ts`): `p = sigmoid(score)`; `p >= 0.7` Strong, `>= 0.3` Partial, else Weak.
+  The raw score is only in a tooltip. No percentages.
+- Naive UTC timestamps from the backend are parsed as UTC (`parseServerDate` appends `Z`).
+- localStorage keys: `refound_backend_url` (default `http://localhost:8000`), `refound_theme` (`system|light|dark`,
+  read by the inline script in `index.html` before first paint), `refound_top_k` (1..10, default 5, sent as `top_k`).
+- Routes: `/` landing page (always; direction 2 removed the Welcome connect gate), `/ask`, `/library`, `/import`, `/history[/:id]`,
+  `/settings`; old `/app/*` paths redirect. No `public/404.html` (Cloudflare Pages SPA fallback needs it absent).
+- `frontend/nginx.conf` is a copy of `nginx/nginx.conf` so the frontend Docker build context has it. Keep them identical.
+
+### Direction 2 (Nov 2026; overrides parts of the above, see the addendum in the plan)
+- Type: Syne (display) + Familjen Grotesk (text), self-hosted. Palette: darkroom tokens; `[data-theme='dark']` also
+  works on a subtree (the landing page is always dark).
+- Navigation: `components/shell/GuideBar.tsx` (index-card guide tabs) in `RootLayout` on every route, including `/`.
+  `/` always renders `pages/Landing.tsx`; there is no connect gate. Connect from Settings → Connection.
+- WebGL: `HeroTray` (WebGL2 shaders in `trayShaders.ts`) and `components/drawer/CardDrawer3D.tsx` (three.js r170,
+  lazy chunk, disposes everything on unmount, renders only while moving). Both probe WebGL2 themselves and fall back
+  to static versions (`print-static`, `StaticDrawer`) without WebGL, on context loss or under reduced motion.
+- Drawer decks: `components/drawer/decks.ts` (`answerDeck` flags the `[Memory N]`-cited sources; `libraryDeck`
+  groups by type with divider cards, max 40 cards). Colour literals for canvas/three live only in `drawerPalette.ts`.
+- Budgets (`npm run check`): entry 125 kB, 3D chunk 150 kB, other JS 190 kB, CSS 12 kB (gzip).
+- Software GL in headless Chromium blocks the main thread long enough for the 3s health check to time out, so GL
+  scenes may show "Offline"; `verify.cjs` runs most scenes with WebGL stubbed off.
+
+## 8. Tasks and status
 Moved to `TASKS.md` (the to-do board: done / in progress / blocked / not started). Keep this file for
 decisions and repo knowledge only.
 
-## 8. Conventions
+## 9. Conventions
 - Branch names describe the work: `feat/...`, `fix/...`, `ci/...`, `docs/...`, never generated ones.
 - Update `TASKS.md` in the same PR that changes a task's state; update this file when a decision changes.

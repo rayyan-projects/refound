@@ -1,173 +1,177 @@
 /**
- * ReFound API Service
- * All endpoints call the backend at the provided URL.
- * The URL is always passed in – never hardcoded.
+ * ReFound API client. Every call takes the backend address; nothing is hard-coded.
+ * Shapes mirror backend/app/api/routes/*.py and backend/app/database/models.py.
  */
 
-// ─── Types ───────────────────────────────────────────────
+export type SourceType = 'chatgpt' | 'chatgpt_share' | 'claude' | 'markdown' | 'txt' | 'pdf' | 'image';
 
 export interface Document {
   id: number;
+  /** Uploaded file name, or the full share URL for link imports. */
   filename: string;
-  source_type: string;
-  title: string;
-  created_at: string;
+  source_type: SourceType | string;
+  /** The real title; may be null or "". */
+  title: string | null;
+  /** Naive UTC, e.g. "2026-11-14T09:12:44.512339" (no "Z"). */
+  created_at: string | null;
   chunk_count: number;
-  status: 'indexed' | 'failed';
+  status: 'pending' | 'indexed' | 'error';
   error_message: string | null;
 }
 
-export interface QueryResponse {
-  answer: string;
-  sources: {
-    source: string;
-    filename: string;
-    score: number;
-    excerpt: string;
-  }[];
-  similar_problems: any[];
-  duration_ms: number;
-}
-
-export interface QueryHistoryItem {
-  id: number;
-  query: string;
-  answer: string;
-  sources: any;
-  created_at: string;
-  duration_ms: number;
-}
-
-export interface ImportResponse {
-  status: 'ok' | 'error';
+export interface ImportResult {
+  status: 'ok' | 'duplicate';
   document_id: number;
-  title: string;
+  title: string | null;
   source_type: string;
   chunks: number;
-  error?: string;
 }
 
-// ─── API Functions ──────────────────────────────────────
+export interface Source {
+  /** Document title ("Unknown" if the document vanished). */
+  source: string;
+  /** Document file name (a URL for link imports). */
+  filename: string;
+  /** Cross-encoder logit, roughly -11..+11. Not 0..1. */
+  score: number;
+  /** First 300 characters of the passage. */
+  excerpt: string;
+}
 
-/**
- * Check if the backend is reachable.
- * GET /api/health
- */
+export interface HistoryItem {
+  id: number;
+  query_text: string;
+  answer: string | null;
+  sources: Source[] | null;
+  similar_problems: unknown[] | null;
+  created_at: string | null;
+  duration_ms: number | null;
+}
+
+export class ApiError extends Error {
+  status: number;
+  kind: 'network' | 'http';
+
+  constructor(message: string, status: number, kind: 'network' | 'http') {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.kind = kind;
+  }
+}
+
+function fallbackMessage(status: number): string {
+  if (status === 404) return 'Not found';
+  if (status === 413) return 'That file is too large for the backend';
+  if (status === 422) return 'The backend could not read that';
+  if (status === 500) return 'The backend hit an error';
+  if (status === 502 || status === 503 || status === 504) return 'The backend could not complete the request';
+  return `Request failed (${status})`;
+}
+
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null;
+}
+
+/** Turns a non-2xx response into an ApiError with a readable message. Raw bodies are never surfaced. */
+export async function readError(res: Response): Promise<ApiError> {
+  let message = '';
+  try {
+    const body: unknown = JSON.parse(await res.text());
+    const detail = isRecord(body) ? body.detail : undefined;
+    if (typeof detail === 'string') {
+      message = detail;
+    } else if (Array.isArray(detail)) {
+      message = detail
+        .map((d) => (isRecord(d) && typeof d.msg === 'string' ? d.msg : ''))
+        .filter(Boolean)
+        .join('; ');
+    }
+  } catch {
+    // not JSON: fall through to the status message
+  }
+  return new ApiError(message.trim() || fallbackMessage(res.status), res.status, 'http');
+}
+
+async function request(url: string, init: RequestInit = {}): Promise<Response> {
+  let res: Response;
+  try {
+    res = await fetch(url, init);
+  } catch (err) {
+    if (init.signal?.aborted && err instanceof DOMException && err.name === 'AbortError') throw err;
+    throw new ApiError('The backend is not reachable', 0, 'network');
+  }
+  if (!res.ok) throw await readError(res);
+  return res;
+}
+
+async function json<T>(res: Response): Promise<T> {
+  try {
+    return (await res.json()) as T;
+  } catch {
+    throw new ApiError('The backend sent a response ReFound could not read', res.status, 'http');
+  }
+}
+
+/** GET /api/health. Resolves false (never throws) when nothing answers within 3 seconds. */
 export async function healthCheck(baseUrl: string): Promise<boolean> {
   try {
-    const res = await fetch(`${baseUrl}/api/health`, {
-      signal: AbortSignal.timeout(3000),
-    });
+    const res = await fetch(`${baseUrl}/api/health`, { signal: AbortSignal.timeout(3000) });
     if (!res.ok) return false;
-    const data = await res.json();
-    return data.status === 'ok';
+    const data: unknown = await res.json();
+    return isRecord(data) && data.status === 'ok';
   } catch {
     return false;
   }
 }
 
-/**
- * Import a file (multipart/form-data).
- * POST /api/documents/import
- */
-export async function importFile(
-  baseUrl: string,
-  file: File
-): Promise<ImportResponse> {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const res = await fetch(`${baseUrl}/api/documents/import`, {
-    method: 'POST',
-    body: formData,
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || 'Import failed');
-  }
-
-  return res.json();
-}
-
-/**
- * Import from a shared conversation URL.
- * POST /api/documents/import-url
- */
-export async function importUrl(
-  baseUrl: string,
-  url: string
-): Promise<ImportResponse> {
-  const res = await fetch(`${baseUrl}/api/documents/import-url`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url }),
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || 'URL import failed');
-  }
-
-  return res.json();
-}
-
-/**
- * List all imported documents.
- * GET /api/documents/
- */
+/** GET /api/documents/ (newest first). */
 export async function listDocuments(baseUrl: string): Promise<Document[]> {
-  const res = await fetch(`${baseUrl}/api/documents/`);
-  if (!res.ok) throw new Error('Failed to fetch documents');
-  return res.json();
+  return json<Document[]>(await request(`${baseUrl}/api/documents/`));
 }
 
-/**
- * Delete a document by ID.
- * DELETE /api/documents/{id}
- */
+/** POST /api/documents/import (multipart field `file`). */
+export async function importFile(baseUrl: string, file: File, signal?: AbortSignal): Promise<ImportResult> {
+  const body = new FormData();
+  body.append('file', file);
+  return json<ImportResult>(await request(`${baseUrl}/api/documents/import`, { method: 'POST', body, signal }));
+}
+
+/** POST /api/documents/import-url. */
+export async function importUrl(baseUrl: string, url: string, signal?: AbortSignal): Promise<ImportResult> {
+  return json<ImportResult>(
+    await request(`${baseUrl}/api/documents/import-url`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+      signal,
+    }),
+  );
+}
+
+/** DELETE /api/documents/{id}. */
 export async function deleteDocument(baseUrl: string, id: number): Promise<void> {
-  const res = await fetch(`${baseUrl}/api/documents/${id}`, {
-    method: 'DELETE',
-  });
-  if (!res.ok) throw new Error('Failed to delete document');
+  await request(`${baseUrl}/api/documents/${id}`, { method: 'DELETE' });
 }
 
-/**
- * Submit a query – streaming response.
- * POST /api/query/
- * 
- * Returns a ReadableStream that yields text chunks as they arrive.
- */
+/** GET /api/query/history?limit=N (newest first). */
+export async function getHistory(baseUrl: string, limit = 100): Promise<HistoryItem[]> {
+  return json<HistoryItem[]>(await request(`${baseUrl}/api/query/history?limit=${limit}`));
+}
+
+/** POST /api/query/. The body is an NDJSON stream; read it with `readNdjson`. */
 export async function queryMemoryStreaming(
   baseUrl: string,
   query: string,
-  topK: number = 5
+  topK: number,
+  signal?: AbortSignal,
 ): Promise<ReadableStream<Uint8Array>> {
-  const res = await fetch(`${baseUrl}/api/query/`, {
+  const res = await request(`${baseUrl}/api/query/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, top_k: topK }),
+    signal,
   });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(errorText || 'Query failed');
-  }
-
-  if (!res.body) {
-    throw new Error('No response body');
-  }
-
+  if (!res.body) throw new ApiError('The backend sent an empty response', res.status, 'http');
   return res.body;
-}
-
-/**
- * Get query history.
- * GET /api/query/history
- */
-export async function getHistory(baseUrl: string): Promise<QueryHistoryItem[]> {
-  const res = await fetch(`${baseUrl}/api/query/history`);
-  if (!res.ok) throw new Error('Failed to fetch history');
-  return res.json();
 }

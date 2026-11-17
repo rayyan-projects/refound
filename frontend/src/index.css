@@ -2,25 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global background that respects the theme token */
-html,
-body,
-#root {
-  background-color: var(--color-canvas);
-  min-height: 100vh;
+@layer base {
+  html { background: var(--canvas); color: var(--ink); -webkit-text-size-adjust: 100%; }
+  body {
+    min-height: 100dvh; margin: 0;
+    font-family: 'Familjen Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-size: 15px; line-height: 22px; font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  #root { min-height: 100dvh; }
+  ::selection { background: var(--mark); color: var(--ink); }
+  :focus { outline: none; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+  mark { background: var(--mark); color: var(--ink); border-radius: 2px; padding: 0 1px; }
+  dialog { padding: 0; border: 0; background: transparent; color: inherit; max-width: none; max-height: none; }
+  dialog::backdrop { background: var(--overlay); }
+  button, input, select, textarea { font: inherit; color: inherit; }
 }
 
-body {
-  color: var(--color-cream);
-  font-family: 'Inter', system-ui, sans-serif;
+/* Lenis smooth scroll (landing page only) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+@layer components {
+  /* Landing: while WebGL paints the print, the DOM text stays for layout, selection and screen readers. */
+  .hero-gl .dev { color: transparent; }
+  /* The amber ring vanishes on the print paper: focus on the print uses its ink. */
+  .print-static, .hero-gl { --focus: var(--print-ink); }
+  .print-static { background: radial-gradient(ellipse 80% 75% at 45% 45%, var(--print) 45%, var(--print-edge) 100%); }
+  .reveal { transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+  .develop-word { display: inline-block; animation: develop 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .reveal-hidden { opacity: 0; transform: translateY(8px); }
 }
 
-@keyframes searchGlow {
-  0%   { opacity: 0.0; transform: scale(1.0); }
-  50%  { opacity: 1.0; transform: scale(1.15); }
-  100% { opacity: 0.0; transform: scale(1.3); }
-}
+@keyframes develop { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: none; } }
 
-.search-glow-active {
-  animation: searchGlow 1.4s ease-in-out infinite;
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

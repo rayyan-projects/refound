@@ -52,7 +52,8 @@ Think of it like a librarian:
 
 ### ⛔ Turned off
 - **Claude share links**: failed in real testing (Claude blocks the way we fetch them), so they're disabled.
-  To do: remove "Claude link" wording from the Import page and this file until a working method is found.
+  The Import page no longer offers them: pasting one shows a single "not supported yet, upload your Claude export
+  instead" message. Claude export files still work.
 
 ### 🟡 Built, but not yet checked properly
 These exist in the code, but the team has reported most of them don't work, or don't work correctly.
@@ -75,10 +76,18 @@ Each one still needs testing and fixing:
 - **Export/backup** of your data
 
 ### 🧹 Small known problems (found while testing imports)
-- Error messages show up as raw code (`{"detail": ...}`) instead of plain text.
-- Search results show odd scores like "404%".
-- Imported chats are listed by their link instead of their title.
-- Some imported text has stray backslashes (e.g. `My pick\:`).
+Fixed in the frontend redesign (Nov 2026):
+- ✅ Error messages showed up as raw code (`{"detail": ...}`); they now read as plain text.
+- ✅ Search results showed odd scores like "404%"; each source now says Strong, Partial or Weak match.
+- ✅ Imported chats were listed by their link; they now show their title.
+- ✅ Stray backslashes in imported text (e.g. `My pick\:`) are hidden on screen. The saved text still has them.
+
+### 🎨 New look (frontend redesign, Nov 2026)
+The app was rebuilt around a "card index": every document has a short call number (like `GPT-0042`), answers are
+set like a page you read, and the passages they used sit beside them with the matching words highlighted. There is a
+Library page, an import queue (several files or a whole folder at once), a History page, and a quick search box
+(Ctrl K / ⌘K). Features that the backend doesn't have yet are not shown as buttons; they are listed once under
+Settings → Planned. For working on the UI without the Python backend there is a mock backend (`npm run mock`).
 
 ### 🚧 In progress: live test sites (UAT)
 A free setup (Cloudflare Pages) so every PR gets its own test website, plus one "UAT" site combining all open PRs.
@@ -93,7 +102,7 @@ The full, up-to-date task list (including half-done work) is in `TASKS.md`.
 3. Build the Similar Problem Detector
 4. Real Settings API
 5. Topics, summaries, image import check
-6. Bulk import, export/backup
+6. Bulk import (the frontend already uploads several files or a folder one by one), export/backup
 
 ## Running it
 - Backend: `cd backend && pip install -r requirements.txt && uvicorn main:app --reload --port 8000`
