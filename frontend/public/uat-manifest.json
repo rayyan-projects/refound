@@ -1,0 +1,15 @@
+{
+  "branch": "uat",
+  "main_sha": "6ed5ed401604233aef503cc8986fbd022b8bd19e",
+  "included": [
+    {
+      "number": 21,
+      "title": "Ci/frontend previews and uat",
+      "author": "AnserAliKhan",
+      "sha": "550d854724c6904eed313c7c93d1608f41386a67",
+      "url": "https://github.com/rayyan-projects/refound/pull/21"
+    }
+  ],
+  "not_included": [],
+  "overrides": []
+}
