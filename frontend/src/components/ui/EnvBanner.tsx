@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBackend } from '../../hooks/useBackend';
+import { useBackendStatus } from '../../hooks/UseBackendStatus';
 
 /**
  * Labels hosted preview / UAT deployments (Cloudflare Pages) so testers know
@@ -26,7 +26,8 @@ interface UatManifest {
 }
 
 export function EnvBanner() {
-  const { isConnected } = useBackend();
+  const { status } = useBackendStatus();
+  const isConnected = status === 'online';
   const [manifest, setManifest] = useState<UatManifest | null>(null);
   const [open, setOpen] = useState(true);
 
