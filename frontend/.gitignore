@@ -23,5 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 
+# Generated on the `uat` branch by .github/scripts/assemble_uat.py
+public/uat-manifest.json
 # Verification screenshots
 .shots

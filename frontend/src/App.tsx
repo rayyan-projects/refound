@@ -1,9 +1,11 @@
+
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from './state/queryClient';
 import { AppShell } from './components/shell/AppShell';
 import { RootLayout } from './components/shell/RootLayout';
+import { EnvBanner } from './components/ui/EnvBanner';
 
 const Landing = lazy(() => import('./pages/Landing'));
 const Ask = lazy(() => import('./pages/Ask'));
@@ -17,22 +19,23 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <EnvBanner />
         <Suspense fallback={null}>
           <Routes>
             <Route element={<RootLayout />}>
               <Route path="/" element={<Landing />} />
               <Route element={<AppShell />}>
-              <Route path="/ask" element={<Ask />} />
-              <Route path="/library" element={<Library />} />
-              <Route path="/import" element={<Import />} />
-              <Route path="/history" element={<History />} />
-              <Route path="/history/:id" element={<History />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/app/search" element={<Navigate to="/ask" replace />} />
-              <Route path="/app/import" element={<Navigate to="/import" replace />} />
-              <Route path="/app/history" element={<Navigate to="/history" replace />} />
-              <Route path="/app/settings" element={<Navigate to="/settings" replace />} />
-              <Route path="*" element={<NotFound />} />
+                <Route path="/ask" element={<Ask />} />
+                <Route path="/library" element={<Library />} />
+                <Route path="/import" element={<Import />} />
+                <Route path="/history" element={<History />} />
+                <Route path="/history/:id" element={<History />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/app/search" element={<Navigate to="/ask" replace />} />
+                <Route path="/app/import" element={<Navigate to="/import" replace />} />
+                <Route path="/app/history" element={<Navigate to="/history" replace />} />
+                <Route path="/app/settings" element={<Navigate to="/settings" replace />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
             </Route>
           </Routes>
@@ -41,3 +44,4 @@ export default function App() {
     </QueryClientProvider>
   );
 }
+
