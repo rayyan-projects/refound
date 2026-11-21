@@ -1,0 +1,26 @@
+{
+  "_fixture": "refound-fixture-data",
+  "data": {
+    "tokens": [
+      "The memories do not contain enough information to answer this. ",
+      "Nothing retrieved mentions a lease or a notice period."
+    ],
+    "final": {
+      "sources": [
+        {
+          "source": "interview-prep.txt",
+          "filename": "interview-prep.txt",
+          "score": -7.9031,
+          "excerpt": "Notice how the question asks for trade-offs, not a single answer. Give a period of thinking time before you start drawing."
+        },
+        {
+          "source": "Sourdough log",
+          "filename": "sourdough-log.md",
+          "score": -9.1158,
+          "excerpt": "Day 6. Fed at 08:10, 1:5:5. Doubled in a little under five hours at 24 C. Rest period before shaping was too short again."
+        }
+      ],
+      "duration_ms": 1876.02
+    }
+  }
+}

@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# ReFound frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The web interface for ReFound: a React 19 + Vite + Tailwind CSS app that talks to the ReFound backend
+over HTTP (`http://localhost:8000` by default; the address is set in the app and saved in the browser).
 
-Currently, two official plugins are available:
+## Commands
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Run everything from this directory.
 
-## React Compiler
+| Command | What it does |
+|---|---|
+| `npm install` | Install dependencies |
+| `npm run dev` | Start the dev server at http://localhost:5173 |
+| `npm run build` | Type-check and build to `dist/` |
+| `npm run lint` | Run ESLint (must pass with zero errors and warnings) |
+| `npm run mock` | Start the mock backend at http://127.0.0.1:8787 (`--scenario <name>` to pick a scenario) |
+| `npm run verify` | Build first, then drive every page and state with Playwright against the mock and save screenshots to `.shots/` |
+| `npm run check` | After a build: check bundle sizes and that `dist/` has no fixture data or CDN references |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+`npm run verify` needs Playwright and Chromium installed globally (it uses `require('playwright')`; Playwright is not a
+dependency of this package). `SHOTS_DIR` changes where screenshots go and `SCENES=ask-idle,library` runs only some
+scenes. The plan behind the design, with every page state, is `docs/FRONTEND_REDESIGN_PLAN.md`; its "Direction 2 addendum" covers
+the landing page, the guide-tab bar and the three.js drawer. Most verify scenes run with WebGL stubbed off; the `*-gl`
+scenes use software GL and need long timeouts.
 
-## Expanding the ESLint configuration
+To work on the UI without the Python backend: run `npm run mock`, start `npm run dev`, open the app and
+connect to `http://127.0.0.1:8787`.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Fixtures never enter `src`
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Fixture data lives in `fixtures/` and is served only by `scripts/mock-backend.cjs`. Nothing under `src/`
+imports from `fixtures/` or `scripts/`, there is no demo mode in the app, and `npm run check` fails if
+fixture data ends up in the production build.

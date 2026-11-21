@@ -1,6 +1,6 @@
 from app.parsers.chatgpt_parser import ChatGPTParser
 from app.parsers.chatgpt_share_parser import ChatGPTShareParser
-from app.parsers.claude_parser import ClaudeJsonParser, ClaudeShareParser
+from app.parsers.claude_parser import ClaudeJsonParser
 from app.parsers.image_parser import ImageParser
 from app.parsers.markdown_parser import MarkdownParser
 from app.parsers.pdf_parser import PDFParser
@@ -13,7 +13,6 @@ PARSER_MAP: dict[str, type[BaseParser]] = {
     "chatgpt": ChatGPTParser,
     "chatgpt_share": ChatGPTShareParser,
     "claude": ClaudeJsonParser,
-    "claude_share": ClaudeShareParser,
     "image": ImageParser,
     "markdown": MarkdownParser,
     "txt": TxtParser,
@@ -34,22 +33,18 @@ EXT_MAP: dict[str, str] = {
     ".bmp": "image",
 }
 
-SHARE_PARSER_MAP: dict[str, type[ChatGPTShareParser | ClaudeShareParser]] = {
-    "chatgpt_share": ChatGPTShareParser,
-    "claude_share": ClaudeShareParser,
-}
-
-
 def _detect_json_type(file_bytes: bytes) -> str:
     try:
         data = json.loads(file_bytes.decode("utf-8", errors="replace"))
         if isinstance(data, list):
             data = data[0] if data else {}
+        if not isinstance(data, dict):
+            return "chatgpt"
         if data.get("chat_messages") is not None:
             return "claude"
         if data.get("mapping") is not None:
             return "chatgpt"
-    except (json.JSONDecodeError, UnicodeDecodeError, KeyError):
+    except (json.JSONDecodeError, UnicodeDecodeError):
         pass
     return "chatgpt"
 
@@ -70,7 +65,3 @@ def detect_source_type(filename: str, file_bytes: bytes | None = None) -> str:
         return _detect_json_type(file_bytes)
     return source
 
-
-def get_share_parser(source_type: str) -> ChatGPTShareParser | ClaudeShareParser | None:
-    cls = SHARE_PARSER_MAP.get(source_type)
-    return cls() if cls else None

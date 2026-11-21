@@ -1,0 +1,10 @@
+{
+  "_fixture": "refound-fixture-data",
+  "data": {
+    "status": "ok",
+    "document_id": 44,
+    "title": "Choosing a queue for the email worker",
+    "source_type": "chatgpt_share",
+    "chunks": 22
+  }
+}
