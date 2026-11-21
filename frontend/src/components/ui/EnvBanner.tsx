@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBackendStatus } from '../../hooks/UseBackendStatus';
+import { useBackendStatus } from '../../hooks/useBackendStatus';
 
 /**
  * Labels hosted preview / UAT deployments (Cloudflare Pages) so testers know
