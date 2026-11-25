@@ -38,6 +38,8 @@ class Settings(BaseSettings):
 
     # CORS
     frontend_origin: str = "http://localhost:5173"
+    # Production alias and per-deploy preview URLs on Cloudflare Pages
+    frontend_origin_regex: str = r"https://([a-z0-9-]+\.)?refound-24j\.pages\.dev"
 
 
 @lru_cache()
